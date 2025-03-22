@@ -86,12 +86,12 @@ if 'DATABASE_URL' in os.environ:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'cattle_disease',
-            'USER': 'root',
-            'PASSWORD': 'A2373688',
-            'HOST': 'localhost',
-            'PORT': '3306',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQL_DATABASE', 'cattle_disease'),
+        'USER': os.environ.get('MYSQL_USER', 'root'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'A2373688'),
+        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+        'PORT': '3306',
         }
     }
 
