@@ -8,8 +8,7 @@ python -m pip install --upgrade pip
 # Install dependencies
 pip install -r requirements.txt
 
-# Create necessary directories
-mkdir -p static
+# Create staticfiles directory
 mkdir -p staticfiles
 
 # Collect static files
