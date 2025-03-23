@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# exit on error
 set -o errexit
 
 # Update pip
-pip install --upgrade pip
+python -m pip install --upgrade pip
 
 # Install dependencies
 pip install -r requirements.txt
