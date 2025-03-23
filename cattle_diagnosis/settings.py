@@ -1,22 +1,21 @@
 import os
-import pymysql
+import dj_database_url
 from pathlib import Path
-pymysql.install_as_MySQLdb()
+
+# Remove MySQL-specific import as we'll use PostgreSQL on Render
+# import pymysql
+# pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-)fn8l+xxgk03b0_m^c%&7n17z^oyip&#se18agez43n@g0rc(v')
+SECRET_KEY = os.environ.get('django-insecure-)fn8l+xxgk03b0_m^c%&7n17z^oyip&#se18agez43n@g0rc(v')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
-
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 INSTALLED_APPS = [
@@ -31,6 +30,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'whitenoise.runserver_nostatic',  # Add this for static files
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
