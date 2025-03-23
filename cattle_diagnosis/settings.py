@@ -2,10 +2,6 @@ import os
 import dj_database_url
 from pathlib import Path
 
-# Remove MySQL-specific import as we'll use PostgreSQL on Render
-# import pymysql
-# pymysql.install_as_MySQLdb()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,12 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',  # Only include once
     'rest_framework',
     'diagnosis',
     'corsheaders',
     'accounts',
-    'whitenoise.runserver_nostatic',  # Add this for static files
-    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -75,25 +70,13 @@ LOGIN_URL = 'login'
 WSGI_APPLICATION = 'cattle_diagnosis.wsgi.application'
 
 # Database configuration for Render
-if 'DATABASE_URL' in os.environ:
-    import dj_database_url
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-else:
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE', 'cattle_disease'),
-        'USER': os.environ.get('MYSQL_USER', 'root'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'A2373688'),
-        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
-        'PORT': '3306',
-        }
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://postgres:postgres@localhost:5432/cattle_disease',
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -119,8 +102,8 @@ USE_TZ = True
 
 # Static files configuration
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
