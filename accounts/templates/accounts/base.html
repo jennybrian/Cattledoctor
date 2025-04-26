@@ -20,13 +20,22 @@ _diagnosis/templates/base.html -->
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'diagnosis_home' %}">Diagnose</a>
+                            <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <span class="nav-link">Welcome, {{ user.username }}</span>
+                            <a class="nav-link" href="{% url 'diagnosis_home' %}">
+                                <i class="fas fa-stethoscope"></i> Diagnose
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            <span class="nav-link text-light">
+                                <i class="fas fa-user"></i> {{ user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
