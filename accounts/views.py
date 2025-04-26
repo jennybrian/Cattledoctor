@@ -18,7 +18,6 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
-
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
