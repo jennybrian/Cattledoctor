@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import home  # Import home view from accounts
+from diagnosis.views import diagnosis_home, predict_disease
+from accounts.views import home
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home, name='home'),  # Root URL shows landing page
-    path('diagnosis/', include('diagnosis.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/', include('accounts.urls')),
+    path("admin/", admin.site.urls),
+    path("", home, name="home"),  # Changed: Root URL now shows landing page
+    path("diagnosis/", include("diagnosis.urls")),  # Keep diagnosis URLs
+    path("predict/", predict_disease, name="predict"),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/", include("accounts.urls")),
 ]
