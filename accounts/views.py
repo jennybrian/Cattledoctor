@@ -36,7 +36,7 @@ def user_login(request):
 
 @login_required
 def home(request):
-    return render(request, "home.html")
+    return render(request, "accounts/home.html")
 
 @login_required
 def diagnosis_home(request):
