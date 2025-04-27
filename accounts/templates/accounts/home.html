@@ -3,13 +3,17 @@
 {% block content %}
 <!-- Hero Section -->
 <div class="container text-center mt-5">
-    <h1 class="display-4 animate__animated animate__fadeInDown">🐄 Welcome to Cattle Disease Diagnosis 🩺</h1>
-    <p class="lead animate__animated animate__fadeInUp">A smart tool to help you diagnose cattle diseases quickly and accurately.</p>
+    <h1 class="display-4 animate__animated animate__fadeInDown">
+        <i class="fas fa-cow"></i> Welcome to Cattle Disease Diagnosis <i class="fas fa-stethoscope"></i>
+    </h1>
+    <p class="lead animate__animated animate__fadeInUp">
+        A smart tool to help you diagnose cattle diseases quickly and accurately.
+    </p>
 </div>
 
 <!-- Banner Image -->
 <div class="container text-center mt-4">
-    <img src="https://source.unsplash.com/1000x400/?cows,field" class="img-fluid rounded shadow-lg animate__animated animate__zoomIn" alt="Cattle Image">
+    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be" class="img-fluid rounded shadow-lg animate__animated animate__zoomIn" alt="Cattle Image">
 </div>
 
 <!-- Action Section -->
@@ -18,7 +22,7 @@
     <p class="animate__animated animate__fadeInUp">Click the button below to start diagnosing your cattle's health.</p>
     
     <a href="{% url 'diagnosis_home' %}" class="btn btn-success btn-lg mt-3 shadow animate__animated animate__pulse animate__infinite">
-        Start Diagnosing 🏥
+        Start Diagnosing <i class="fas fa-hospital"></i>
     </a>
 </div>
 
@@ -26,23 +30,23 @@
 <div class="container mt-5">
     <div class="row text-center">
         <div class="col-md-4">
-            <div class="card p-3 shadow-lg">
-                <img src="https://source.unsplash.com/200x150/?veterinary,medical" class="card-img-top rounded" alt="Veterinary">
-                <h5 class="mt-3">AI-Powered Diagnosis</h5>
+            <div class="card p-3 shadow-lg h-100">
+                <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
+                <h5>AI-Powered Diagnosis</h5>
                 <p>Our system uses AI models to suggest possible cattle diseases based on symptoms.</p>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card p-3 shadow-lg">
-                <img src="https://source.unsplash.com/200x150/?farm,technology" class="card-img-top rounded" alt="Farm Technology">
-                <h5 class="mt-3">Real-Time Insights</h5>
+            <div class="card p-3 shadow-lg h-100">
+                <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                <h5>Real-Time Insights</h5>
                 <p>Get immediate recommendations and guidance for better cattle health management.</p>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card p-3 shadow-lg">
-                <img src="https://source.unsplash.com/200x150/?doctor,animal" class="card-img-top rounded" alt="Animal Doctor">
-                <h5 class="mt-3">Veterinary Support</h5>
+            <div class="card p-3 shadow-lg h-100">
+                <i class="fas fa-user-md fa-3x text-info mb-3"></i>
+                <h5>Veterinary Support</h5>
                 <p>Connect with professional veterinarians if further assistance is needed.</p>
             </div>
         </div>
@@ -54,7 +58,8 @@
     <p>© 2025 Cattle Disease Diagnosis. All rights reserved.</p>
 </footer>
 
-<!-- Include Bootstrap CSS and Animate.css -->
+<!-- Include Bootstrap, Animate.css, and FontAwesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock %}
