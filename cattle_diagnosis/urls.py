@@ -7,7 +7,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home, name="home"),  # Changed: Root URL now shows landing page
     path("diagnosis/", include("diagnosis.urls")),  # Keep diagnosis URLs
-    path("predict/", predict_disease, name="predict"),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/", include("accounts.urls")),
 ]

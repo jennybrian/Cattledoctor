@@ -36,7 +36,7 @@ def user_login(request):
 @login_required
 def home(request):
     """Landing page view after successful login"""
-    return render(request, "home.html")  # This is our landing page
+    return render(request, "accounts/home.html")  # This is our landing page
 
 @login_required
 def diagnosis_home(request):
