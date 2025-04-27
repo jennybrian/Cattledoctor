@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import predict_disease, diagnosis_home
-from .views import register, user_login, user_logout, home
 
 # Define URL patterns for the diagnosis app
 urlpatterns = [
