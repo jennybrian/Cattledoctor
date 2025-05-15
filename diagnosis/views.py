@@ -235,7 +235,7 @@ def predict_disease(request):
                 "disease": predicted_disease_name.title(),
                 "matched_symptoms": processed_symptoms,
                 "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
-                "advice": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
+                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
             }],
             "input_symptoms": symptoms
         }
