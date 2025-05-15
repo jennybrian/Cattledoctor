@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import joblib
+from .models import DiagnosisHistory, Disease, Symptom
 
 
 # Disease_info dictionary for treatment and prevention information
@@ -167,6 +168,12 @@ def preprocess_symptoms(symptoms):
     return processed_symptoms
 
 @login_required
+def diagnosis_history(request):
+    """View for displaying user's diagnosis history"""
+    histories = DiagnosisHistory.objects.filter(user=request.user).select_related('disease').prefetch_related('symptoms')
+    return render(request, "diagnosis/history.html", {'histories': histories})
+
+@login_required
 def home(request):
     """Home page view requiring authentication"""
     return render(request, "home.html")
@@ -189,46 +196,51 @@ def predict_disease(request):
         # Preprocess symptoms
         processed_symptoms = preprocess_symptoms(symptoms)
         symptoms_text = ", ".join(sorted(processed_symptoms))
-        
-        logger.debug(f"Original symptoms: {symptoms}")
-        logger.debug(f"Processed symptoms: {processed_symptoms}")
-        logger.debug(f"Symptoms text: {symptoms_text}")
 
         X = vectorizer.transform([symptoms_text])
-        
         probabilities = model.predict_proba(X)[0]
-        # Get top 3 predictions
-        top_indices = probabilities.argsort()[-3:][::-1]
-        predictions = []
 
-        for idx in top_indices:
-            if probabilities[idx] > 0.1:  # 10% confidence threshold
-                disease = label_encoder.inverse_transform([idx])[0]
-                disease_key = disease.lower()
-                
-                disease_details = disease_info.get(disease_key, {
-                    'treatment': f'Treatment information not available for {disease}',
-                    'prevention': f'Prevention information not available for {disease}'
-                })
-                
-                predictions.append({
-                    "disease": disease,
-                    "confidence_score": f"{probabilities[idx]:.2%}",
-                    "matched_symptoms": processed_symptoms,
-                    "treatment": disease_details['treatment'],
-                    "prevention": disease_details['prevention']
-                })
+        # Get top prediction above 10% threshold
+        top_index = probabilities.argsort()[-1]
+        top_probability = probabilities[top_index]
 
-        if predictions:
-            return Response({
-                "predictions": predictions,
-                "input_symptoms": symptoms
-            })
-        else:
+        if top_probability < 0.1:
             return Response({
                 "predictions": [],
                 "message": "No diseases matched with sufficient confidence"
             })
+
+        predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
+
+        # Get disease object from DB (case-insensitive match)
+        try:
+            disease_obj = Disease.objects.get(name__iexact=predicted_disease_name)
+        except Disease.DoesNotExist:
+            disease_obj = None
+
+        # Log diagnosis history
+        if disease_obj:
+            history = DiagnosisHistory.objects.create(
+                user=request.user,
+                disease=disease_obj,
+            )
+            # Add matched symptoms
+            for symptom_text in processed_symptoms:
+                symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
+                history.symptoms.add(symptom_obj)
+
+        # Return details to user
+        response_data = {
+            "predictions": [{
+                "disease": predicted_disease_name.title(),
+                "matched_symptoms": processed_symptoms,
+                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
+                "advice": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
+            }],
+            "input_symptoms": symptoms
+        }
+
+        return Response(response_data)
 
     except Exception as e:
         logger.error(f"Prediction error: {str(e)}", exc_info=True)
