@@ -1,0 +1,43 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">🕒 Diagnosis History</h2>
+
+    {% if histories %}
+        <div class="table-responsive shadow p-3 bg-white rounded">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Disease</th>
+                        <th>Symptoms</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in histories %}
+                    <tr>
+                        <td>{{ entry.diagnosis_date|date:"Y-m-d H:i" }}</td>
+                        <td>{{ entry.disease.name }}</td>
+                        <td>
+                            <ul>
+                                {% for symptom in entry.symptoms.all %}
+                                    <li>{{ symptom.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ entry.notes|default:"—" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            You haven't submitted any diagnoses yet.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
