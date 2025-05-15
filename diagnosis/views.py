@@ -81,7 +81,7 @@ try:
             for _, row in disease_data.iterrows():
                 disease_name = row['Disease'].lower().strip()
                 treatment = row.get('Treatment', 'Treatment information not available')
-                prevention = row.get('Advice', 'Prevention/Advice information not available')  # Changed from 'Prevention' to 'Advice'
+                prevention = row.get('Prevention', 'Prevention/Advice information not available')  # Changed from 'Prevention' to 'Advice'
                 
                 disease_info[disease_name] = {
                     'treatment': treatment,
