@@ -198,11 +198,13 @@ def predict_disease(request):
             return Response({"error": "No symptoms provided"}, status=400)
 
         # Preprocess symptoms
-        processed_symptoms = preprocess_symptoms(symptoms)
-        symptoms_text = ", ".join(sorted(processed_symptoms))
-
         X = vectorizer.transform([symptoms_text])
         probabilities = model.predict_proba(X)[0]
+        
+        # Add these lines to define top_index and probability
+        top_indices = probabilities.argsort()[-3:][::-1]  # Get top 3 predictions
+        top_index = top_indices[0]  # Get the highest probability disease
+        top_probability = probabilities[top_index]
 
         predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
 
