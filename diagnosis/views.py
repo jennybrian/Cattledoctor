@@ -170,7 +170,11 @@ def preprocess_symptoms(symptoms):
 @login_required
 def diagnosis_history(request):
     """View for displaying user's diagnosis history"""
-    histories = DiagnosisHistory.objects.filter(user=request.user).select_related('disease').prefetch_related('symptoms')
+    histories = DiagnosisHistory.objects.filter(
+        user=request.user
+    ).select_related('disease').prefetch_related('symptoms').order_by('-diagnosis_date')
+    
+    logger.info(f"Fetching history for user {request.user.username}: found {histories.count()} records")
     return render(request, "diagnosis/history.html", {'histories': histories})
 
 @login_required
@@ -200,44 +204,46 @@ def predict_disease(request):
         X = vectorizer.transform([symptoms_text])
         probabilities = model.predict_proba(X)[0]
 
-        # Get top prediction above 10% threshold
-        top_index = probabilities.argsort()[-1]
-        top_probability = probabilities[top_index]
-
-        if top_probability < 0.1:
-            return Response({
-                "predictions": [],
-                "message": "No diseases matched with sufficient confidence"
-            })
-
         predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
 
-        # Get disease object from DB (case-insensitive match)
+        # Get or create disease object
         try:
             disease_obj = Disease.objects.get(name__iexact=predicted_disease_name)
         except Disease.DoesNotExist:
-            disease_obj = None
-
-        # Log diagnosis history
-        if disease_obj:
-            history = DiagnosisHistory.objects.create(
-                user=request.user,
-                disease=disease_obj,
+            # Create disease if it doesn't exist
+            disease_info_entry = disease_info.get(predicted_disease_name, {})
+            disease_obj = Disease.objects.create(
+                name=predicted_disease_name,
+                description="Disease description pending",
+                first_aid=disease_info_entry.get('prevention', 'Consult veterinarian immediately'),
+                advice=disease_info_entry.get('prevention', 'Prevention information not available')
             )
-            # Add matched symptoms
-            for symptom_text in processed_symptoms:
-                symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
-                history.symptoms.add(symptom_obj)
 
-        # Return details to user
+        # Create diagnosis history with confidence score
+        history = DiagnosisHistory.objects.create(
+            user=request.user,
+            disease=disease_obj,
+            confidence_score=float(top_probability * 100)  # Convert to percentage
+        )
+
+        # Add symptoms to history
+        for symptom_text in processed_symptoms:
+            symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
+            history.symptoms.add(symptom_obj)
+
+        logger.info(f"Created diagnosis history for user {request.user.username}: Disease={predicted_disease_name}, Confidence={top_probability:.2%}")
+
         response_data = {
             "predictions": [{
                 "disease": predicted_disease_name.title(),
+                "confidence_score": f"{top_probability:.2%}",
                 "matched_symptoms": processed_symptoms,
-                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
-                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
+                "first_aid": disease_obj.first_aid,
+                "prevention": disease_obj.advice,
+                "history_id": history.id
             }],
-            "input_symptoms": symptoms
+            "input_symptoms": symptoms,
+            "message": "Please consult a veterinarian for proper diagnosis and treatment."
         }
 
         return Response(response_data)

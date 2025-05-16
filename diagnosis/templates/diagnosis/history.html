@@ -6,19 +6,46 @@
     <h2 class="text-center mb-4">🕒 Diagnosis History</h2>
 
     {% if histories %}
-        <ul class="list-group mt-3">
+        <div class="row">
             {% for history in histories %}
-                <li class="list-group-item">
-                    <strong>Disease:</strong> {{ history.disease.name }}<br>
-                    <strong>Symptoms:</strong>
-                    {{ history.symptoms.all|join:", " }}<br>
-                    <strong>Advice:</strong> {{ history.disease.advice }}<br>
-                    <small><strong>Date:</strong> {{ history.diagnosis_date }}</small>
-                </li>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ history.disease.name }}</h5>
+                            <p class="card-text">
+                                <strong>Symptoms:</strong><br>
+                                {% for symptom in history.symptoms.all %}
+                                    <span class="badge bg-secondary me-1">{{ symptom.name }}</span>
+                                {% endfor %}
+                            </p>
+                            <p class="card-text">
+                                <strong>First Aid:</strong><br>
+                                {{ history.disease.first_aid }}
+                            </p>
+                            <p class="card-text">
+                                <strong>Prevention:</strong><br>
+                                {{ history.disease.prevention }}
+                            </p>
+                            <p class="card-text">
+                                <strong>Confidence Score:</strong>
+                                {{ history.confidence_score|floatformat:2 }}%
+                            </p>
+                            <p class="card-text text-muted">
+                                <small>Diagnosed on: {{ history.diagnosis_date|date:"F j, Y, g:i a" }}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>You have no diagnosis history yet.</p>
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> You have no diagnosis history yet.
+            <br><br>
+            <a href="{% url 'diagnosis_home' %}" class="btn btn-primary">
+                Start a New Diagnosis
+            </a>
+        </div>
     {% endif %}
 </div>
 {% endblock %}
