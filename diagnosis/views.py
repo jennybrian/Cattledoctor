@@ -216,44 +216,32 @@ def predict_disease(request):
 
         predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
 
-        # Get or create disease object
+        # Get disease object from DB (case-insensitive match)
         try:
             disease_obj = Disease.objects.get(name__iexact=predicted_disease_name)
         except Disease.DoesNotExist:
-            # Create disease if it doesn't exist
-            disease_info_entry = disease_info.get(predicted_disease_name, {})
-            disease_obj = Disease.objects.create(
-                name=predicted_disease_name,
-                description="Disease description pending",
-                first_aid=disease_info_entry.get('prevention', 'Consult veterinarian immediately'),
-                advice=disease_info_entry.get('prevention', 'Prevention information not available')
+            disease_obj = None
+
+        # Log diagnosis history
+        if disease_obj:
+            history = DiagnosisHistory.objects.create(
+                user=request.user,
+                disease=disease_obj,
             )
+            # Add matched symptoms
+            for symptom_text in processed_symptoms:
+                symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
+                history.symptoms.add(symptom_obj)
 
-        # Create diagnosis history with confidence score
-        history = DiagnosisHistory.objects.create(
-            user=request.user,
-            disease=disease_obj,
-            confidence_score=float(top_probability * 100)  # Convert to percentage
-        )
-
-        # Add symptoms to history
-        for symptom_text in processed_symptoms:
-            symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
-            history.symptoms.add(symptom_obj)
-
-        logger.info(f"Created diagnosis history for user {request.user.username}: Disease={predicted_disease_name}, Confidence={top_probability:.2%}")
-
+        # Return details to user
         response_data = {
             "predictions": [{
                 "disease": predicted_disease_name.title(),
-                "confidence_score": f"{top_probability:.2%}",
                 "matched_symptoms": processed_symptoms,
-                "first_aid": disease_obj.first_aid,
-                "prevention": disease_obj.advice,
-                "history_id": history.id
+                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
+                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
             }],
-            "input_symptoms": symptoms,
-            "message": "Please consult a veterinarian for proper diagnosis and treatment."
+            "input_symptoms": symptoms
         }
 
         return Response(response_data)
