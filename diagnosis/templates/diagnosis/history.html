@@ -6,38 +6,19 @@
     <h2 class="text-center mb-4">🕒 Diagnosis History</h2>
 
     {% if histories %}
-        <div class="table-responsive shadow p-3 bg-white rounded">
-            <table class="table table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Date</th>
-                        <th>Disease</th>
-                        <th>Symptoms</th>
-                        <th>Notes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entry in histories %}
-                    <tr>
-                        <td>{{ entry.diagnosis_date|date:"Y-m-d H:i" }}</td>
-                        <td>{{ entry.disease.name }}</td>
-                        <td>
-                            <ul>
-                                {% for symptom in entry.symptoms.all %}
-                                    <li>{{ symptom.name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                        <td>{{ entry.notes|default:"—" }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <ul class="list-group mt-3">
+            {% for history in histories %}
+                <li class="list-group-item">
+                    <strong>Disease:</strong> {{ history.disease.name }}<br>
+                    <strong>Symptoms:</strong>
+                    {{ history.symptoms.all|join:", " }}<br>
+                    <strong>Advice:</strong> {{ history.disease.advice }}<br>
+                    <small><strong>Date:</strong> {{ history.diagnosis_date }}</small>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
-        <div class="alert alert-info text-center" role="alert">
-            You haven't submitted any diagnoses yet.
-        </div>
+        <p>You have no diagnosis history yet.</p>
     {% endif %}
 </div>
 {% endblock %}
