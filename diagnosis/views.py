@@ -221,7 +221,7 @@ def predict_disease(request):
         disease_obj = Disease.objects.create(
             name=predicted_disease_name,
             description="Disease description pending",
-            first_aid=disease_info.get(predicted_disease_name, {}).get('prevention', 'Consult veterinarian immediately'),
+            treatment=disease_info.get(predicted_disease_name, {}).get('prevention', 'Consult veterinarian immediately'),
             advice=disease_info.get(predicted_disease_name, {}).get('prevention', 'Prevention information not available')
             )
 
@@ -246,7 +246,7 @@ def predict_disease(request):
                 "disease": predicted_disease_name.title(),
                 "confidence_score": f"{top_probability:.2%}",
                 "matched_symptoms": processed_symptoms,
-                "first_aid": disease_obj.first_aid,
+                "treatment": disease_obj.treatment,
                 "prevention": disease_obj.advice,
                 "history_id": history.id
             }],
