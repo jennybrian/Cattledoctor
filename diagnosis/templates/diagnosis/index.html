@@ -1,110 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cattle Disease Diagnosis</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 800px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 40px;
-        }
-        .spinner-border {
-            display: none;
-        }
-        .select2-container {
-            width: 100% !important;
-        }
-        .progress {
-        height: 25px
-         }
-        .progress-bar {
-        line-height: 25px;
-        font-size: 14px;
-        font-weight: bold;
-         }
-        .alert {
-        margin-bottom: 0;
-         }
-         .treatment-card {
-            border-left: 4px solid #28a745;
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f8fff9;
-        }
-        .prevention-card {
-            border-left: 4px solid #17a2b8;
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f8fdff;
-        }
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cattle Disease Diagnosis</title>
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #2d8659;
-        }
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 
-        .btn-logout {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-logout:hover {
-            background-color: #c82333;
-            transform: translateY(-2px);
-            color: white;
-            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-name {
-            color: #2d866a;
-            font-weight: 500;
-        }
-    </style>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .select2-container {
+      width: 100% !important;
+    }
+    .treatment-card {
+      border-left: 4px solid #28a745;
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f8fff9;
+    }
+    .prevention-card {
+      border-left: 4px solid #17a2b8;
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f8fdff;
+    }
+    #results {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
 
-            <div class="user-info">
-                <span class="user-name">
-                    <i class="fas fa-user"></i> {{ request.user.username }}
-                </span>
-                <a href="{% url 'logout' %}" class="btn btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
+  <!-- ✅ Consistent Blue Header Bar -->
+  <div class="py-3 px-3 px-md-5 text-white" style="background-color: #0d6efd;">
+    <div class="container-fluid">
+      <div class="row align-items-center justify-content-between">
+        <!-- Left: Page Title -->
+        <div class="col-md-6 mb-2 mb-md-0">
+          <h4 class="mb-0">
+            <i class="fas fa-stethoscope me-2"></i> Cattle Disease Diagnosis
+          </h4>
         </div>
-    </nav>
-    <div class="container">
-        <h2 class="mb-4 text-primary text-center">🐄 Cattle Disease Diagnosis</h2>
+        <!-- Right: User + Logout -->
+        <div class="col-md-6 text-md-end">
+          <span class="me-3">
+            <i class="fas fa-user"></i> {{ request.user.username }}
+          </span>
+          <a href="{% url 'logout' %}" class="btn btn-light btn-sm">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧪 Diagnosis Section -->
+  <div class="container mt-5 bg-white p-4 rounded shadow-sm">
+    <h4 class="text-primary text-center mb-4">🐄 Select Symptoms</h4>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Select Symptoms:</label>
@@ -184,169 +142,113 @@
             </select>
         </div>
 
-        <button class="btn btn-primary w-100" onclick="diagnoseDisease()">🔍 Diagnose</button>
+    <button class="btn btn-primary w-100" onclick="diagnoseDisease()">🔍 Diagnose</button>
 
-        <!-- Loading Spinner -->
-        <div id="loading" class="mt-3 text-center">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-
-        <div id="results" class="mt-4">
-            <h3 class="text-success">Diagnosis Results:</h3>
-            <div id="diseaseList" class="list-group"></div>
-        </div>
+    <div id="loading" class="text-center mt-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-    $(document).ready(function() {
-        // Initialize Select2 with improved configuration
-        $('#symptomSelect').select2({
-            placeholder: "Select symptoms (max 10)...",
-            allowClear: true,
-            maximumSelectionLength: 10,
-            width: '100%',
-            templateResult: formatSymptom,
-            templateSelection: formatSymptom
-        });
+    <div id="results" class="mt-4">
+      <h5 class="text-success">Diagnosis Results:</h5>
+      <div id="diseaseList" class="list-group mt-3"></div>
+    </div>
+  </div>
 
-        // Hide results section initially
-        $('#results').hide();
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#symptomSelect').select2({
+        placeholder: "Select symptoms...",
+        allowClear: true,
+        width: '100%'
+      });
+      $('#results').hide();
     });
 
-    // Format symptoms in dropdown
-    function formatSymptom(symptom) {
-    if (!symptom.id) return symptom.text;
-    
-    let icon = '🔸';
-    let category = $(symptom.element).closest('optgroup').attr('label');
-    
-    if (category === 'Common Symptoms') {
-        icon = '⭐';
-    } else if (category === 'Disease-Specific Symptoms') {
-        icon = '🏥';
-    }
-    
-    return $(`
-        <span>
-            ${icon} ${symptom.text}
-            <small class="text-muted ms-1">(${category})</small>
-        </span>
-    `);
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          cookie = cookie.trim();
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
     }
 
     async function diagnoseDisease() {
-    const selectedSymptoms = $('#symptomSelect').val();
-    const diseaseList = document.getElementById("diseaseList");
-    const loading = document.getElementById("loading");
-    const results = document.getElementById("results");
+      const selectedSymptoms = $('#symptomSelect').val();
+      const diseaseList = document.getElementById("diseaseList");
+      const loading = document.getElementById("loading");
+      const results = document.getElementById("results");
 
-    if (!selectedSymptoms || selectedSymptoms.length === 0) {
+      if (!selectedSymptoms || selectedSymptoms.length === 0) {
         alert("Please select at least one symptom");
         return;
-    }
+      }
 
-    loading.style.display = "block";
-    results.style.display = "none";
-    diseaseList.innerHTML = "";
+      loading.style.display = "block";
+      results.style.display = "none";
+      diseaseList.innerHTML = "";
 
-    try {
+      try {
         const response = await fetch("/predict/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken")
-            },
-            body: JSON.stringify({
-                symptoms: selectedSymptoms
-            })
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify({ symptoms: selectedSymptoms })
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         const result = await response.json();
         loading.style.display = "none";
         results.style.display = "block";
 
         if (result.predictions && result.predictions.length > 0) {
-            const prediction = result.predictions[0];
-            const confidence = parseFloat(prediction.confidence_score);
-            const severityClass = confidence > 0.7 ? 'bg-danger' : 
-                                confidence > 0.4 ? 'bg-warning' : 
-                                'bg-info';
-            
-        const item = `
+          const prediction = result.predictions[0];
+
+          const item = `
             <div class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h4 class="text-primary mb-0">
-                        <i class="fas fa-stethoscope"></i> ${prediction.disease}
-                    </h4>
-                </div>
-                
-                <div class="mb-3">
-                    <p class="mb-1">
-                        <i class="fas fa-list-ul"></i> 
-                        <strong>Matched Symptoms:</strong> 
-                        ${prediction.matched_symptoms.join(", ")}
-                    </p>
-                </div>
-
-                <div class="treatment-card">
-                    <h5 class="text-success mb-2">
-                        <i class="fas fa-pills"></i> Treatment
-                    </h5>
-                    <p class="mb-0">${prediction.treatment}</p>
-                </div>
-
-                <div class="prevention-card">
-                    <h5 class="text-info mb-2">
-                        <i class="fas fa-shield-alt"></i> Advice
-                    </h5>
-                    <p class="mb-0">${prediction.prevention}</p>
-                </div>
+              <h5 class="text-primary">
+                <i class="fas fa-user-md"></i> ${prediction.disease}
+              </h5>
+              <p class="mb-1"><strong>Matched Symptoms:</strong> ${prediction.matched_symptoms.join(", ")}</p>
+              <div class="treatment-card">
+                <h6><i class="fas fa-pills"></i> Treatment</h6>
+                <p>${prediction.treatment}</p>
+              </div>
+              <div class="prevention-card">
+                <h6><i class="fas fa-shield-alt"></i> Advice</h6>
+                <p>${prediction.prevention}</p>
+              </div>
             </div>
-        `;
-            diseaseList.innerHTML = item;
+          `;
+          diseaseList.innerHTML = item;
         } else {
-            diseaseList.innerHTML = `
-                <div class="alert alert-warning" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i> 
-                    No diseases matched the selected symptoms with sufficient confidence.
-                </div>
-            `;
+          diseaseList.innerHTML = `
+            <div class="alert alert-warning">
+              <i class="fas fa-exclamation-triangle"></i> No diseases matched with sufficient confidence.
+            </div>`;
         }
-    } catch (error) {
+      } catch (error) {
         loading.style.display = "none";
-        console.error("Error:", error);
         diseaseList.innerHTML = `
-            <div class="alert alert-danger" role="alert">
-                <i class="fas fa-exclamation-circle"></i> 
-                Error getting diagnosis. Please try again later.
-                <br><small>${error.message}</small>
-            </div>
-        `;
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i> Error getting diagnosis. Try again later.
+            <br><small>${error.message}</small>
+          </div>`;
+      }
     }
-}
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    </script>
+  </script>
 </body>
 </html>
