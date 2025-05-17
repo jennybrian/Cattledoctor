@@ -169,12 +169,7 @@ def preprocess_symptoms(symptoms):
 
 @login_required
 def diagnosis_history(request):
-    """View for displaying user's diagnosis history"""
-    histories = DiagnosisHistory.objects.filter(
-        user=request.user
-    ).select_related('disease').prefetch_related('symptoms').order_by('-diagnosis_date')
-    
-    logger.info(f"Fetching history for user {request.user.username}: found {histories.count()} records")
+    histories = DiagnosisHistory.objects.filter(user=request.user).select_related('disease').prefetch_related('symptoms')
     return render(request, "diagnosis/history.html", {'histories': histories})
 
 @login_required
@@ -204,47 +199,51 @@ def predict_disease(request):
         X = vectorizer.transform([symptoms_text])
         probabilities = model.predict_proba(X)[0]
 
-        # Get top prediction above 10% threshold
-        top_index = probabilities.argsort()[-1]
-        top_probability = probabilities[top_index]
+        # Get top 3 predictions with confidence > 10%
+        top_indices = probabilities.argsort()[-3:][::-1]
+        predictions = []
 
-        if top_probability < 0.1:
-            return Response({
-                "predictions": [],
-                "message": "No diseases matched with sufficient confidence"
-            })
+        for idx in top_indices:
+            confidence = probabilities[idx]
+            if confidence < 0.1:
+                continue
 
-        predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
+            disease_name = label_encoder.inverse_transform([idx])[0].strip()
+            disease_key = disease_name.lower()
 
-        # Get disease object from DB (case-insensitive match)
-        try:
-            disease_obj = Disease.objects.get(name__iexact=predicted_disease_name)
-        except Disease.DoesNotExist:
-            disease_obj = None
+            # Get or create disease object
+            disease_obj, _ = Disease.objects.get_or_create(name__iexact=disease_name)
 
-        # Log diagnosis history
-        if disease_obj:
+            # Save history
             history = DiagnosisHistory.objects.create(
                 user=request.user,
                 disease=disease_obj,
+                # ✅ Include confidence score
+                confidence_score=confidence,
             )
-            # Add matched symptoms
+
             for symptom_text in processed_symptoms:
                 symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
                 history.symptoms.add(symptom_obj)
 
-        # Return details to user
-        response_data = {
-            "predictions": [{
-                "disease": predicted_disease_name.title(),
+            predictions.append({
+                "disease": disease_name.title(),
+                "confidence_score": f"{confidence:.2%}",
                 "matched_symptoms": processed_symptoms,
-                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
-                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
-            }],
-            "input_symptoms": symptoms
-        }
+                "treatment": disease_info.get(disease_key, {}).get("treatment", "Not available"),
+                "prevention": disease_info.get(disease_key, {}).get("prevention", "Not available"),
+            })
 
-        return Response(response_data)
+        if predictions:
+            return Response({
+                "predictions": predictions,
+                "input_symptoms": symptoms
+            })
+        else:
+            return Response({
+                "predictions": [],
+                "message": "No diseases matched with sufficient confidence"
+            })
 
     except Exception as e:
         logger.error(f"Prediction error: {str(e)}", exc_info=True)
