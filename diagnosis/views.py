@@ -199,34 +199,34 @@ def predict_disease(request):
         X = vectorizer.transform([symptoms_text])
         probabilities = model.predict_proba(X)[0]
 
-        # Get top 3 predictions with confidence > 10%
-        top_indices = probabilities.argsort()[-3:][::-1]
-        predictions = []
+        # Get top prediction above 10% threshold
+        top_index = probabilities.argsort()[-1]
+        top_probability = probabilities[top_index]
 
-        for idx in top_indices:
-            confidence = probabilities[idx]
-            if confidence < 0.1:
-                continue
+        if top_probability < 0.1:
+            return Response({
+                "predictions": [],
+                "message": "No diseases matched with sufficient confidence"
+            })
 
-            disease_name = label_encoder.inverse_transform([idx])[0].strip()
-            disease_key = disease_name.lower()
+        predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
 
             # Get or create disease object
-            disease_obj, _ = Disease.objects.get_or_create(name__iexact=disease_name)
+        disease_obj, _ = Disease.objects.get_or_create(name__iexact=disease_name)
 
             # Save history
-            history = DiagnosisHistory.objects.create(
+        history = DiagnosisHistory.objects.create(
                 user=request.user,
                 disease=disease_obj,
                 # ✅ Include confidence score
                 confidence_score=confidence,
             )
 
-            for symptom_text in processed_symptoms:
+        for symptom_text in processed_symptoms:
                 symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
                 history.symptoms.add(symptom_obj)
 
-            predictions.append({
+        predictions.append({
                 "disease": disease_name.title(),
                 "confidence_score": f"{confidence:.2%}",
                 "matched_symptoms": processed_symptoms,
