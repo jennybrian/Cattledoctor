@@ -169,7 +169,14 @@ def preprocess_symptoms(symptoms):
 
 @login_required
 def diagnosis_history(request):
-    histories = DiagnosisHistory.objects.filter(user=request.user).select_related('disease').prefetch_related('symptoms')
+    """View for displaying user's diagnosis history"""
+    histories = (DiagnosisHistory.objects
+                .filter(user=request.user)
+                .select_related('disease')
+                .prefetch_related('symptoms')
+                .order_by('-diagnosis_date'))
+    
+    logger.info(f"Fetched {histories.count()} history records for user {request.user.username}")
     return render(request, "diagnosis/history.html", {'histories': histories})
 
 @login_required
@@ -215,26 +222,34 @@ def predict_disease(request):
         try:
             disease_obj = Disease.objects.get(name__iexact=predicted_disease_name)
         except Disease.DoesNotExist:
-            disease_obj = None
-
-        # Log diagnosis history
-        if disease_obj:
-            history = DiagnosisHistory.objects.create(
-                user=request.user,
-                disease=disease_obj,
+            # Create disease if it doesn't exist
+            disease_obj = Disease.objects.create(
+                name=predicted_disease_name,
+                description="Description pending",
+                treatment=disease_info.get(predicted_disease_name, {}).get('treatment', 'Not available'),
+                advice=disease_info.get(predicted_disease_name, {}).get('prevention', 'Not available')
             )
-            # Add matched symptoms
-            for symptom_text in processed_symptoms:
-                symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
-                history.symptoms.add(symptom_obj)
 
-        # Return details to user
+        # Create diagnosis history with confidence score
+        history = DiagnosisHistory.objects.create(
+            user=request.user,
+            disease=disease_obj,
+            confidence_score=float(top_probability * 100),  # Convert to percentage
+            notes=f"Symptoms: {', '.join(processed_symptoms)}"
+        )
+
+        # Add symptoms to history
+        for symptom_text in processed_symptoms:
+            symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
+            history.symptoms.add(symptom_obj)
+
+        # Return details to user (keeping existing format)
         response_data = {
             "predictions": [{
                 "disease": predicted_disease_name.title(),
                 "matched_symptoms": processed_symptoms,
-                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
-                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
+                "treatment": disease_obj.treatment,
+                "prevention": disease_obj.advice,
             }],
             "input_symptoms": symptoms
         }
