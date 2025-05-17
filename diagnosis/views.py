@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 import joblib
 from .models import DiagnosisHistory, Disease, Symptom
+from django.shortcuts import redirect
+from django.contrib import messages
 
 
 # Disease_info dictionary for treatment and prevention information
@@ -178,6 +180,13 @@ def diagnosis_history(request):
     
     logger.info(f"Fetched {histories.count()} history records for user {request.user.username}")
     return render(request, "diagnosis/history.html", {'histories': histories})
+
+@login_required
+def clear_history(request):
+    if request.method == 'POST':
+        DiagnosisHistory.objects.filter(user=request.user).delete()
+        messages.success(request, 'Your diagnosis history has been cleared.')
+    return redirect('diagnosis_history')
 
 @login_required
 def home(request):
