@@ -211,39 +211,35 @@ def predict_disease(request):
 
         predicted_disease_name = label_encoder.inverse_transform([top_index])[0].strip().lower()
 
-            # Get or create disease object
-        disease_obj, _ = Disease.objects.get_or_create(name__iexact=disease_name)
+        # Get disease object from DB (case-insensitive match)
+        try:
+            disease_obj = Disease.objects.get(name__iexact=predicted_disease_name)
+        except Disease.DoesNotExist:
+            disease_obj = None
 
-            # Save history
-        history = DiagnosisHistory.objects.create(
+        # Log diagnosis history
+        if disease_obj:
+            history = DiagnosisHistory.objects.create(
                 user=request.user,
                 disease=disease_obj,
-                # ✅ Include confidence score
-                confidence_score=confidence,
             )
-
-        for symptom_text in processed_symptoms:
+            # Add matched symptoms
+            for symptom_text in processed_symptoms:
                 symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
                 history.symptoms.add(symptom_obj)
 
-        predictions.append({
-                "disease": disease_name.title(),
-                "confidence_score": f"{confidence:.2%}",
+        # Return details to user
+        response_data = {
+            "predictions": [{
+                "disease": predicted_disease_name.title(),
                 "matched_symptoms": processed_symptoms,
-                "treatment": disease_info.get(disease_key, {}).get("treatment", "Not available"),
-                "prevention": disease_info.get(disease_key, {}).get("prevention", "Not available"),
-            })
+                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
+                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
+            }],
+            "input_symptoms": symptoms
+        }
 
-        if predictions:
-            return Response({
-                "predictions": predictions,
-                "input_symptoms": symptoms
-            })
-        else:
-            return Response({
-                "predictions": [],
-                "message": "No diseases matched with sufficient confidence"
-            })
+        return Response(response_data)
 
     except Exception as e:
         logger.error(f"Prediction error: {str(e)}", exc_info=True)
