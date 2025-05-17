@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import CustomAuthenticationForm
 
 def register(request):
     if request.method == 'POST':
@@ -20,18 +21,18 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
-            messages.success(request, f'Welcome back, {username}!')
+            messages.success(request, f'Welcome back, {user.username}!')
             return redirect('home')
         else:
-            messages.error(request, 'Invalid username or password.')
-    
-    return render(request, 'accounts/login.html')
+            messages.error(request, 'Login failed. Please check your credentials.')
+    else:
+        form = CustomAuthenticationForm()
+
+    return render(request, 'accounts/login.html', {'form': form})
 
 
 @login_required
