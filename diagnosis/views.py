@@ -217,41 +217,26 @@ def predict_disease(request):
         except Disease.DoesNotExist:
             disease_obj = None
 
-        # Create disease if it doesn't exist
-        disease_obj = Disease.objects.create(
-            name=predicted_disease_name,
-            description="Disease description pending",
-            treatment=disease_info.get(predicted_disease_name, {}).get('prevention', 'Consult veterinarian immediately'),
-            advice=disease_info.get(predicted_disease_name, {}).get('prevention', 'Prevention information not available')
+        # Log diagnosis history
+        if disease_obj:
+            history = DiagnosisHistory.objects.create(
+                user=request.user,
+                disease=disease_obj,
             )
-
-        # Log diagnosis history with confidence score
-        history = DiagnosisHistory.objects.create(
-            user=request.user,
-            disease=disease_obj,
-            confidence_score=float(top_probability * 100)  # Convert to percentage
-        )
-
-        # Add matched symptoms
-        for symptom_text in processed_symptoms:
-            symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
-            history.symptoms.add(symptom_obj)
-
-        # Log successful creation
-        logger.info(f"Created diagnosis history ID {history.id} for user {request.user.username}")
+            # Add matched symptoms
+            for symptom_text in processed_symptoms:
+                symptom_obj, _ = Symptom.objects.get_or_create(name=symptom_text)
+                history.symptoms.add(symptom_obj)
 
         # Return details to user
         response_data = {
             "predictions": [{
                 "disease": predicted_disease_name.title(),
-                "confidence_score": f"{top_probability:.2%}",
                 "matched_symptoms": processed_symptoms,
-                "treatment": disease_obj.treatment,
-                "prevention": disease_obj.advice,
-                "history_id": history.id
+                "treatment": disease_info.get(predicted_disease_name, {}).get("treatment", "Not available"),
+                "prevention": disease_info.get(predicted_disease_name, {}).get("prevention", "Not available"),
             }],
-            "input_symptoms": symptoms,
-            "message": "Please consult a veterinarian for proper diagnosis and treatment."
+            "input_symptoms": symptoms
         }
 
         return Response(response_data)
