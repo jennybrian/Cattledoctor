@@ -188,6 +188,7 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
   <script>
     $(document).ready(function () {
       $('#symptomSelect').select2({
@@ -197,6 +198,86 @@
       });
       $('#results').hide();
     });
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          cookie = cookie.trim();
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    async function diagnoseDisease() {
+      const selectedSymptoms = $('#symptomSelect').val();
+      const diseaseList = document.getElementById("diseaseList");
+      const loading = document.getElementById("loading");
+      const results = document.getElementById("results");
+
+      if (!selectedSymptoms || selectedSymptoms.length === 0) {
+        alert("Please select at least one symptom");
+        return;
+      }
+
+      loading.style.display = "block";
+      results.style.display = "none";
+      diseaseList.innerHTML = "";
+
+      try {
+        const response = await fetch("/predict/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify({ symptoms: selectedSymptoms })
+        });
+
+        const result = await response.json();
+        loading.style.display = "none";
+        results.style.display = "block";
+
+        if (result.predictions && result.predictions.length > 0) {
+          const prediction = result.predictions[0];
+
+          const item = `
+            <div class="list-group-item">
+              <h5 class="text-primary">
+                <i class="fas fa-user-md"></i> ${prediction.disease}
+              </h5>
+              <p class="mb-1"><strong>Matched Symptoms:</strong> ${prediction.matched_symptoms.join(", ")}</p>
+              <div class="treatment-card">
+                <h6><i class="fas fa-pills"></i> Treatment</h6>
+                <p>${prediction.treatment}</p>
+              </div>
+              <div class="prevention-card">
+                <h6><i class="fas fa-shield-alt"></i> Advice</h6>
+                <p>${prediction.prevention}</p>
+              </div>
+            </div>
+          `;
+          diseaseList.innerHTML = item;
+        } else {
+          diseaseList.innerHTML = `
+            <div class="alert alert-warning">
+              <i class="fas fa-exclamation-triangle"></i> No diseases matched with sufficient confidence.
+            </div>`;
+        }
+      } catch (error) {
+        loading.style.display = "none";
+        diseaseList.innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i> Error getting diagnosis. Try again later.
+            <br><small>${error.message}</small>
+          </div>`;
+      }
+    }
   </script>
 </body>
 </html>
