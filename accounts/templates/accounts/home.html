@@ -137,6 +137,51 @@
             opacity: 1;
         }
     }
+    .testimonial-carousel {
+        padding: 20px 0;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background: #0d6efd;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.8;
+    }
+
+    .carousel-control-prev {
+        left: -50px;
+    }
+
+    .carousel-control-next {
+        right: -50px;
+    }
+
+    .carousel-indicators {
+        bottom: -50px;
+    }
+
+    .carousel-indicators button {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #0d6efd;
+        opacity: 0.5;
+    }
+
+    .carousel-indicators .active {
+        opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        .carousel-control-prev,
+        .carousel-control-next {
+            display: none;
+        }
+    }
 </style>
 
 <!-- Animated Banner Image -->
@@ -195,83 +240,85 @@
     <h3 class="text-center mb-4 fw-bold animate__animated animate__fadeInDown">
         <span class="text-primary">🌟</span> What Our Users Say
     </h3>
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInLeft">
-                <div class="quote-icon text-primary mb-3">
-                    <i class="fas fa-quote-left fa-2x"></i>
-                </div>
-                <p class="testimonial-text">"This tool saved my entire herd during a disease outbreak. The AI diagnosis was spot-on and helped me take immediate action!"</p>
-                <div class="text-end mt-3">
-                    <h6 class="testimonial-author mb-1">Grace M.</h6>
-                    <p class="testimonial-role mb-0">Dairy Farmer, Kenya</p>
+    
+    <div id="testimonialCarousel" class="carousel slide testimonial-carousel" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- First Slide -->
+            <div class="carousel-item active">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon text-primary mb-3">
+                                <i class="fas fa-quote-left fa-2x"></i>
+                            </div>
+                            <p class="testimonial-text">"This tool saved my entire herd during a disease outbreak. The AI diagnosis was spot-on!"</p>
+                            <div class="text-end mt-3">
+                                <h6 class="testimonial-author mb-1">Grace M.</h6>
+                                <p class="testimonial-role mb-0">Dairy Farmer, Kenya</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon text-primary mb-3">
+                                <i class="fas fa-quote-left fa-2x"></i>
+                            </div>
+                            <p class="testimonial-text">"As a veterinarian, I recommend this system to all my clients. It's accurate and user-friendly."</p>
+                            <div class="text-end mt-3">
+                                <h6 class="testimonial-author mb-1">Dr. Ahmed B.</h6>
+                                <p class="testimonial-role mb-0">Veterinarian, Egypt</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon text-primary mb-3">
+                                <i class="fas fa-quote-left fa-2x"></i>
+                            </div>
+                            <p class="testimonial-text">"The real-time insights have transformed how we manage our cattle health!"</p>
+                            <div class="text-end mt-3">
+                                <h6 class="testimonial-author mb-1">Joan K.</h6>
+                                <p class="testimonial-role mb-0">Ranch Manager, USA</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInUp animate__delay-1s">
-                <div class="quote-icon text-primary mb-3">
-                    <i class="fas fa-quote-left fa-2x"></i>
-                </div>
-                <p class="testimonial-text">"As a veterinarian, I recommend this system to all my clients. It's accurate, user-friendly, and helps prioritize urgent cases."</p>
-                <div class="text-end mt-3">
-                    <h6 class="testimonial-author mb-1">Dr. Ahmed B.</h6>
-                    <p class="testimonial-role mb-0">Veterinarian, Egypt</p>
+
+            <!-- Second Slide -->
+            <div class="carousel-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon text-primary mb-3">
+                                <i class="fas fa-quote-left fa-2x"></i>
+                            </div>
+                            <p class="testimonial-text">"The preventive care suggestions have helped us maintain a healthier herd."</p>
+                            <div class="text-end mt-3">
+                                <h6 class="testimonial-author mb-1">Carlos R.</h6>
+                                <p class="testimonial-role mb-0">Livestock Manager, Brazil</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more testimonials here -->
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInRight animate__delay-2s">
-                <div class="quote-icon text-primary mb-3">
-                    <i class="fas fa-quote-left fa-2x"></i>
-                </div>
-                <p class="testimonial-text">"The real-time insights have transformed how we manage our cattle health. It's like having a vet on call 24/7!"</p>
-                <div class="text-end mt-3">
-                    <h6 class="testimonial-author mb-1">Joan K.</h6>
-                    <p class="testimonial-role mb-0">Ranch Manager, USA</p>
-                </div>
-            </div>
-        </div>
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
 
-        <div class="col-md-4 mb-4">
-            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInLeft animate__delay-3s">
-                <div class="quote-icon text-primary mb-3">
-                    <i class="fas fa-quote-left fa-2x"></i>
-                </div>
-                <p class="testimonial-text">"The preventive care suggestions have helped us maintain a healthier herd. Our treatment costs have decreased significantly."</p>
-                <div class="text-end mt-3">
-                    <h6 class="testimonial-author mb-1">Carlos R.</h6>
-                    <p class="testimonial-role mb-0">Livestock Manager, Brazil</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInUp animate__delay-4s">
-                <div class="quote-icon text-primary mb-3">
-                    <i class="fas fa-quote-left fa-2x"></i>
-                </div>
-                <p class="testimonial-text">"Being new to cattle farming, this tool has been invaluable. It's educational and helps build confidence in disease management."</p>
-                <div class="text-end mt-3">
-                    <h6 class="testimonial-author mb-1">Sarah M.</h6>
-                    <p class="testimonial-role mb-0">New Farmer, Australia</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInRight animate__delay-5s">
-                <div class="quote-icon text-primary mb-3">
-                    <i class="fas fa-quote-left fa-2x"></i>
-                </div>
-                <p class="testimonial-text">"The system's accuracy in identifying early disease symptoms has prevented several potential outbreaks in our farm."</p>
-                <div class="text-end mt-3">
-                    <h6 class="testimonial-author mb-1">Michael P.</h6>
-                    <p class="testimonial-role mb-0">Commercial Farmer, Canada</p>
-                </div>
-            </div>
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
         </div>
     </div>
 </div>
@@ -280,6 +327,15 @@
 <footer class="mt-5 text-center text-muted">
     <p>© 2025 Cattle Disease Diagnosis. All rights reserved.</p>
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new bootstrap.Carousel(document.querySelector('#testimonialCarousel'), {
+            interval: 5000,
+            wrap: true
+        });
+    });
+</script>
 
 <!-- Include Bootstrap, Animate.css, and FontAwesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
