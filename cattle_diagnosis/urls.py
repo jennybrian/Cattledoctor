@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from diagnosis.views import diagnosis_home, predict_disease
-from accounts.views import home
+from accounts.views import home, verify_email
 
 # Define URL patterns
 urlpatterns = [
@@ -16,4 +16,7 @@ urlpatterns = [
 
     # ✅ Include diagnosis app URLs correctly
     path("diagnosis/", include("diagnosis.urls")),
+
+    # Email verification URL
+    path('verify-email/<str:token>/', verify_email, name='verify_email'),
 ]
