@@ -231,12 +231,17 @@
 
   <div class="container mt-5 bg-white p-4 rounded shadow-sm animate__animated animate__fadeInUp">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h4 class="mb-0">
-        👋 Hey there! Hope you are good! 🌟 Let's proceed 🐮
-      </h4>
-      <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary animate__animated animate__fadeInRight">
-        <i class="fas fa-history"></i> Diagnosis History
-      </a>
+        <div class="d-flex align-items-center gap-3">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <h4 class="mb-0">
+                👋 Hey there! Hope you are good! 🌟 Let's proceed 🐮
+            </h4>
+        </div>
+        <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary animate__animated animate__fadeInRight">
+            <i class="fas fa-history"></i> Diagnosis History
+        </a>
     </div>
 
         <div class="mb-3">
