@@ -70,26 +70,50 @@
     .btn-group {
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #0d6efd, #0099ff);
+        border-radius: 6px;
+        border: 3px solid #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(45deg, #0099ff, #0d6efd);
+    }
+
+    /* Hide default scrollbar for Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #0d6efd #f1f1f1;
+    }
 </style>
 
 <div class="container mt-5">
-    <!-- Back Button -->
-    <div class="mb-4">
-        <a href="{% url 'home' %}" class="btn btn-outline-primary">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </a>
-    </div>
-
     <!-- Header & Actions -->
     <div class="row mb-4 align-items-center">
         <div class="col-12 col-md-6 mb-2 mb-md-0">
-            <div class="d-flex align-items-center">
-                <h2 class="mb-0 me-3">
-                    🕒 Diagnosis History
-                </h2>
-                <span class="badge bg-primary">
-                    {{ histories|length }} Cases
-                </span>
+            <div class="d-flex align-items-center gap-3">
+                <a href="{% url 'home' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <div>
+                    <h2 class="mb-0 me-3 d-inline">
+                        🕒 Diagnosis History
+                    </h2>
+                    <span class="badge bg-primary">
+                        {{ histories|length }} Cases
+                    </span>
+                </div>
             </div>
         </div>
         <div class="col-12 col-md-6 text-md-end">
