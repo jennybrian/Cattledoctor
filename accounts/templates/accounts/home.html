@@ -3,9 +3,141 @@
 {% block content %}
 <!-- Hero Section -->
 <div class="container text-center mt-5">
-    <h1 class="display-4 animate__animated animate__fadeInDown">🐄 Welcome to Cattle Disease Diagnosis 🩺</h1>
-    <p class="lead animate__animated animate__fadeInUp">A smart tool to help you diagnose cattle diseases quickly and accurately.</p>
+    <h1 class="display-4 fw-bold animate__animated animate__fadeInDown">
+        <span class="text-dark">Welcome to</span>
+        <span class="text-primary">Cattle Disease Diagnosis</span>
+        <span class="ms-2">🐄 🩺</span>
+    </h1>
+    <p class="lead fw-semibold animate__animated animate__fadeInUp">
+        A smart tool to help you diagnose cattle diseases quickly and accurately.
+    </p>
 </div>
+
+<style>
+    .display-4 {
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    
+    .lead {
+        font-size: 1.35rem;
+        color: #495057;
+    }
+    .feature-card {
+        border: none;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .ai-card {
+        background: linear-gradient(145deg, #ffffff, #f0f7ff);
+    }
+    .ai-card::before {
+        background: linear-gradient(45deg, #0d6efd, #0099ff);
+    }
+    .ai-card:hover {
+        box-shadow: 0 8px 25px rgba(13, 110, 253, 0.2) !important;
+    }
+
+    .insights-card {
+        background: linear-gradient(145deg, #ffffff, #f0fff7);
+    }
+    .insights-card::before {
+        background: linear-gradient(45deg, #198754, #00cc88);
+    }
+    .insights-card:hover {
+        box-shadow: 0 8px 25px rgba(25, 135, 84, 0.2) !important;
+    }
+
+    .vet-card {
+        background: linear-gradient(145deg, #ffffff, #f0f9ff);
+    }
+    .vet-card::before {
+        background: linear-gradient(45deg, #0dcaf0, #00b8ff);
+    }
+    .vet-card:hover {
+        box-shadow: 0 8px 25px rgba(13, 202, 240, 0.2) !important;
+    }
+
+    .feature-card h5 {
+        font-weight: 600;
+        margin: 15px 0;
+    }
+
+    .feature-card p {
+        color: #6c757d;
+        line-height: 1.6;
+    }
+    /* Testimonial style section */
+    .testimonial-card {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border: none;
+        border-radius: 15px;
+        transition: all 0.5s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .testimonial-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #0d6efd, #0099ff);
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .testimonial-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #495057;
+        font-style: italic;
+    }
+
+    .testimonial-author {
+        color: #0d6efd;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .testimonial-role {
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+</style>
 
 <!-- Animated Banner Image -->
 <div class="container text-center mt-4">
@@ -35,21 +167,21 @@
 <div class="container mt-5 animate__animated animate__fadeInUp">
     <div class="row text-center">
         <div class="col-md-4 mb-4">
-            <div class="card p-3 shadow-lg h-100 animate__animated animate__zoomIn">
+            <div class="card feature-card ai-card p-3 shadow-lg h-100 animate__animated animate__zoomIn">
                 <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
                 <h5>AI-Powered Diagnosis</h5>
                 <p>Our system uses AI models to suggest possible cattle diseases based on symptoms.</p>
             </div>
         </div>
         <div class="col-md-4 mb-4">
-            <div class="card p-3 shadow-lg h-100 animate__animated animate__zoomIn animate__delay-1s">
+            <div class="card feature-card insights-card p-3 shadow-lg h-100 animate__animated animate__zoomIn animate__delay-1s">
                 <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
                 <h5>Real-Time Insights</h5>
                 <p>Get immediate recommendations and guidance for better cattle health management.</p>
             </div>
         </div>
         <div class="col-md-4 mb-4">
-            <div class="card p-3 shadow-lg h-100 animate__animated animate__zoomIn animate__delay-2s">
+            <div class="card feature-card vet-card p-3 shadow-lg h-100 animate__animated animate__zoomIn animate__delay-2s">
                 <i class="fas fa-user-md fa-3x text-info mb-3"></i>
                 <h5>Veterinary Support</h5>
                 <p>Connect with professional veterinarians if further assistance is needed.</p>
@@ -60,24 +192,85 @@
 
 <!-- Testimonials Section -->
 <div class="container mt-5">
-    <h3 class="text-center mb-4 animate__animated animate__fadeInDown">🌟 What Our Users Say</h3>
+    <h3 class="text-center mb-4 fw-bold animate__animated animate__fadeInDown">
+        <span class="text-primary">🌟</span> What Our Users Say
+    </h3>
     <div class="row">
-        <div class="col-md-4">
-            <div class="card shadow-lg p-3 mb-4 animate__animated animate__fadeInUp">
-                <p>“This tool saved my entire herd during a disease outbreak. It’s fast and easy!”</p>
-                <h6 class="text-end">— Grace M., Farmer</h6>
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInLeft">
+                <div class="quote-icon text-primary mb-3">
+                    <i class="fas fa-quote-left fa-2x"></i>
+                </div>
+                <p class="testimonial-text">"This tool saved my entire herd during a disease outbreak. The AI diagnosis was spot-on and helped me take immediate action!"</p>
+                <div class="text-end mt-3">
+                    <h6 class="testimonial-author mb-1">Grace M.</h6>
+                    <p class="testimonial-role mb-0">Dairy Farmer, Kenya</p>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-lg p-3 mb-4 animate__animated animate__fadeInUp animate__delay-1s">
-                <p>“I love how detailed and accurate the diagnosis is. Highly recommended!”</p>
-                <h6 class="text-end">— Ahmed B., Ranch Owner</h6>
+        
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="quote-icon text-primary mb-3">
+                    <i class="fas fa-quote-left fa-2x"></i>
+                </div>
+                <p class="testimonial-text">"As a veterinarian, I recommend this system to all my clients. It's accurate, user-friendly, and helps prioritize urgent cases."</p>
+                <div class="text-end mt-3">
+                    <h6 class="testimonial-author mb-1">Dr. Ahmed B.</h6>
+                    <p class="testimonial-role mb-0">Veterinarian, Egypt</p>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-lg p-3 mb-4 animate__animated animate__fadeInUp animate__delay-2s">
-                <p>“A must-have for any livestock farmer. It’s like having a vet in your pocket!”</p>
-                <h6 class="text-end">— Joan K., Livestock Specialist</h6>
+
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInRight animate__delay-2s">
+                <div class="quote-icon text-primary mb-3">
+                    <i class="fas fa-quote-left fa-2x"></i>
+                </div>
+                <p class="testimonial-text">"The real-time insights have transformed how we manage our cattle health. It's like having a vet on call 24/7!"</p>
+                <div class="text-end mt-3">
+                    <h6 class="testimonial-author mb-1">Joan K.</h6>
+                    <p class="testimonial-role mb-0">Ranch Manager, USA</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInLeft animate__delay-3s">
+                <div class="quote-icon text-primary mb-3">
+                    <i class="fas fa-quote-left fa-2x"></i>
+                </div>
+                <p class="testimonial-text">"The preventive care suggestions have helped us maintain a healthier herd. Our treatment costs have decreased significantly."</p>
+                <div class="text-end mt-3">
+                    <h6 class="testimonial-author mb-1">Carlos R.</h6>
+                    <p class="testimonial-role mb-0">Livestock Manager, Brazil</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInUp animate__delay-4s">
+                <div class="quote-icon text-primary mb-3">
+                    <i class="fas fa-quote-left fa-2x"></i>
+                </div>
+                <p class="testimonial-text">"Being new to cattle farming, this tool has been invaluable. It's educational and helps build confidence in disease management."</p>
+                <div class="text-end mt-3">
+                    <h6 class="testimonial-author mb-1">Sarah M.</h6>
+                    <p class="testimonial-role mb-0">New Farmer, Australia</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="testimonial-card shadow-lg p-4 animate__animated animate__fadeInRight animate__delay-5s">
+                <div class="quote-icon text-primary mb-3">
+                    <i class="fas fa-quote-left fa-2x"></i>
+                </div>
+                <p class="testimonial-text">"The system's accuracy in identifying early disease symptoms has prevented several potential outbreaks in our farm."</p>
+                <div class="text-end mt-3">
+                    <h6 class="testimonial-author mb-1">Michael P.</h6>
+                    <p class="testimonial-role mb-0">Commercial Farmer, Canada</p>
+                </div>
             </div>
         </div>
     </div>
