@@ -240,6 +240,26 @@
         right: 1rem;
         font-size: 2rem;
     }
+
+    /* Add to your existing style section */
+    .carousel-item {
+        transition: transform .6s ease-in-out;
+    }
+
+    .carousel .carousel-indicators {
+        margin-bottom: -3rem;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        transition: all 0.3s ease;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.1);
+    }
 </style>
 
 <!-- Animated Banner Image -->
@@ -299,7 +319,7 @@
         <span class="text-primary">🌟</span> What Our Users Say
     </h3>
     
-    <div id="testimonialCarousel" class="carousel slide testimonial-carousel" data-bs-ride="carousel">
+    <div id="testimonialCarousel" class="carousel slide carousel-dark testimonial-carousel" data-bs-ride="carousel">
         <div class="carousel-inner">
             <!-- First Slide -->
             <div class="carousel-item active">
@@ -461,6 +481,8 @@
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active"></button>
             <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="3"></button>
         </div>
     </div>
 </div>
@@ -473,8 +495,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         new bootstrap.Carousel(document.querySelector('#testimonialCarousel'), {
-            interval: 5000,
-            wrap: true
+            interval: 5000,  // Time between slides in milliseconds
+            wrap: true,      // Enable continuous loop
+            ride: 'carousel',// Start cycling automatically
+            touch: true      // Enable touch swiping on mobile
         });
     });
 </script>
