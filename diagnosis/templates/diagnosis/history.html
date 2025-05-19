@@ -75,20 +75,22 @@
 <div class="container mt-5">
     <!-- Back Button -->
     <div class="mb-4">
-        <a href="{% url 'home' %}" class="btn btn-outline-primary">
-            <i class="fas fa-arrow-left"></i> Back to Home
+        <a href="{% url 'diagnosis_home' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to Diagnosis
         </a>
     </div>
 
     <!-- Header & Actions -->
     <div class="row mb-4 align-items-center">
-        <div class="col-12 text-center mb-3">
-            <h2 class="fw-bold mb-2">
-                🕒 Diagnosis History
-            </h2>
-            <span class="badge bg-primary">
-                {{ histories|length }} Cases
-            </span>
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+            <div class="d-flex align-items-center">
+                <h2 class="mb-0 me-3">
+                    🕒 Diagnosis History
+                </h2>
+                <span class="badge bg-primary">
+                    {{ histories|length }} Cases
+                </span>
+            </div>
         </div>
         <div class="col-12 col-md-6 text-md-end">
             {% if histories %}
@@ -228,15 +230,15 @@
             <div class="card bg-success text-white">
                 <div class="card-body">
                     <h6 class="card-title">Resolved Cases</h6>
-                    <h2 class="mb-0">{{ resolved_count }}</h2>
+                    <h2 class="mb-0">{{ histories|selectattr:"is_resolved"|length }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
-            <div class="card bg-warning text-dark">
+            <div class="card bg-warning">
                 <div class="card-body">
                     <h6 class="card-title">This Month</h6>
-                    <h2 class="mb-0">{{ monthly_count }}</h2>
+                    <h2 class="mb-0">{{ histories|selectattr:"diagnosis_date"|within_days:30|length }}</h2>
                 </div>
             </div>
         </div>
@@ -244,7 +246,7 @@
             <div class="card bg-info text-white">
                 <div class="card-body">
                     <h6 class="card-title">This Week</h6>
-                    <h2 class="mb-0">{{ weekly_count }}</h2>
+                    <h2 class="mb-0">{{ histories|selectattr:"diagnosis_date"|within_days:7|length }}</h2>
                 </div>
             </div>
         </div>
