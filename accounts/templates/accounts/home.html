@@ -182,6 +182,64 @@
             display: none;
         }
     }
+    .testimonial-card {
+        background: #ffffff;  /* Solid white background instead of gradient */
+        border: none;
+        border-radius: 15px;
+        transition: all 0.5s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;  /* Ensure all cards have same height */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .testimonial-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #0d6efd;  /* Solid blue instead of gradient */
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .testimonial-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #495057;
+        font-style: italic;
+        flex-grow: 1;  /* Allow text to fill available space */
+        margin-bottom: 1rem;
+        min-height: 80px;  /* Minimum height for consistency */
+    }
+
+    .testimonial-author {
+        color: #0d6efd;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .testimonial-role {
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin-bottom: 0;
+    }
+
+    .quote-icon {
+        color: #0d6efd;
+        opacity: 0.2;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 2rem;
+    }
 </style>
 
 <!-- Animated Banner Image -->
@@ -248,81 +306,140 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="testimonial-card shadow-lg p-4">
-                            <div class="quote-icon text-primary mb-3">
-                                <i class="fas fa-quote-left fa-2x"></i>
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
                             </div>
-                            <p class="testimonial-text">"This tool saved my entire herd during a disease outbreak. The AI diagnosis was spot-on!"</p>
-                            <div class="text-end mt-3">
-                                <h6 class="testimonial-author mb-1">Grace M.</h6>
-                                <p class="testimonial-role mb-0">Dairy Farmer, Kenya</p>
-                            </div>
-                        </div>
-                    </div>
-            <!-- First Slide -->
-                    <div class="col-md-4">
-                        <div class="testimonial-card shadow-lg p-4">
-                            <div class="quote-icon text-primary mb-3">
-                                <i class="fas fa-quote-left fa-2x"></i>
-                            </div>
-                            <p class="testimonial-text">"As a veterinarian, I recommend this system to all my clients. It's accurate and user-friendly."</p>
-                            <div class="text-end mt-3">
-                                <h6 class="testimonial-author mb-1">Dr. Ahmed B.</h6>
-                                <p class="testimonial-role mb-0">Veterinarian, Egypt</p>
+                            <div class="card-content">
+                                <p class="testimonial-text">"This tool saved my entire herd during a disease outbreak. The AI diagnosis was spot-on!"</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Grace M.</h6>
+                                    <p class="testimonial-role">Dairy Farmer, Chinhoyi</p>
+                                </div>
                             </div>
                         </div>
                     </div>
+            <!-- Second Slide -->
                     <div class="col-md-4">
                         <div class="testimonial-card shadow-lg p-4">
-                            <div class="quote-icon text-primary mb-3">
-                                <i class="fas fa-quote-left fa-2x"></i>
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
                             </div>
-                            <p class="testimonial-text">"The real-time insights have transformed how we manage our cattle health!"</p>
-                            <div class="text-end mt-3">
-                                <h6 class="testimonial-author mb-1">Joan K.</h6>
-                                <p class="testimonial-role mb-0">Ranch Manager, USA</p>
+                            <div class="card-content">
+                                <p class="testimonial-text">"As a veterinarian, I recommend this system to all my clients. It's accurate and user-friendly."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Dr. Ahmed B.</h6>
+                                    <p class="testimonial-role">Veterinarian, Bulawayo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="testimonial-text">"The real-time insights have transformed how we manage our cattle health!"</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Joan K.</h6>
+                                    <p class="testimonial-role">Ranch Manager, Mutare</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Second Slide -->
-            <div class="carousel-item active">
+            <!-- Third Slide -->
+            <div class="carousel-item">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="testimonial-card shadow-lg p-4">
-                            <div class="quote-icon text-primary mb-3">
-                                <i class="fas fa-quote-left fa-2x"></i>
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
                             </div>
-                            <p class="testimonial-text">"This tool saved my entire herd during a disease outbreak. The AI diagnosis was spot-on!"</p>
-                            <div class="text-end mt-3">
-                                <h6 class="testimonial-author mb-1">Grace M.</h6>
-                                <p class="testimonial-role mb-0">Dairy Farmer, Kenya</p>
-                            </div>
-                        </div>
-                    </div>
-            <!-- First Slide -->
-                    <div class="col-md-4">
-                        <div class="testimonial-card shadow-lg p-4">
-                            <div class="quote-icon text-primary mb-3">
-                                <i class="fas fa-quote-left fa-2x"></i>
-                            </div>
-                            <p class="testimonial-text">"As a veterinarian, I recommend this system to all my clients. It's accurate and user-friendly."</p>
-                            <div class="text-end mt-3">
-                                <h6 class="testimonial-author mb-1">Dr. Ahmed B.</h6>
-                                <p class="testimonial-role mb-0">Veterinarian, Egypt</p>
+                            <div class="card-content">
+                                <p class="testimonial-text">"Before this tool, I used to guess what was wrong. Now I feel more confident managing my herd."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Tendai N.</h6>
+                                    <p class="testimonial-role">Farmer, Masvingo</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="testimonial-card shadow-lg p-4">
-                            <div class="quote-icon text-primary mb-3">
-                                <i class="fas fa-quote-left fa-2x"></i>
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
                             </div>
-                            <p class="testimonial-text">"The real-time insights have transformed how we manage our cattle health!"</p>
-                            <div class="text-end mt-3">
-                                <h6 class="testimonial-author mb-1">Joan K.</h6>
-                                <p class="testimonial-role mb-0">Ranch Manager, USA</p>
+                            <div class="card-content">
+                                <p class="testimonial-text">"My cows were often sick without me knowing the cause. This app changed everything."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Sipho D.</h6>
+                                    <p class="testimonial-role">Livestock Owner, Bulawayo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="testimonial-text">"It works well even in the rural areas where vet services are limited. Very useful."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Rudo M.</h6>
+                                    <p class="testimonial-role">Small-Scale Farmer, Gokwe</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fourth Slide -->
+            <div class="carousel-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="testimonial-text">"Very simple to use. I just select symptoms and get instant advice."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Blessing Z.</h6>
+                                    <p class="testimonial-role">Cattle Breeder, Chinhoyi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="testimonial-text">"I don’t have to wait for someone else to tell me what’s wrong with my animals."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Nomusa K.</h6>
+                                    <p class="testimonial-role">Goat & Cattle Farmer, Mutare</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card shadow-lg p-4">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <div class="card-content">
+                                <p class="testimonial-text">"This platform helps me treat issues early before they become serious."</p>
+                                <div class="text-end mt-auto">
+                                    <h6 class="testimonial-author">Farai M.</h6>
+                                    <p class="testimonial-role">Farmer, Mhondoro</p>
+                                </div>
                             </div>
                         </div>
                     </div>
