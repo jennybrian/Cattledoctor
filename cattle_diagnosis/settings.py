@@ -15,6 +15,7 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
+    'accounts.apps.AccountsConfig',  # Move accounts app first
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,7 +26,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'diagnosis',
     'corsheaders',
-    'accounts',
 ]
 
 MIDDLEWARE = [
