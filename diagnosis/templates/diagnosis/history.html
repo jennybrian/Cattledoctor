@@ -5,7 +5,7 @@
 <style>
     /* Card animations and styling */
     .card {
-        transition: all 0.3s ease;
+        transition: all 0.3s ease-in-out;
         border: none;
         margin-bottom: 20px;
     }
@@ -13,6 +13,11 @@
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .card[style*="display: none"] {
+        opacity: 0;
+        transform: translateY(20px);
     }
 
     /* Timeline date header */
@@ -44,6 +49,26 @@
         right: 10px;
         color: #28a745;
         font-size: 0.9rem;
+    }
+
+    .btn-group .btn-outline-primary.active {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+    }
+
+    .dropdown-item i {
+        width: 20px;
+    }
+
+    .btn-group {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 </style>
 
@@ -81,6 +106,35 @@
         {% endfor %}
     {% endif %}
 
+    <!-- Filter and Export Options -->
+    {% if histories %}
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" data-filter="all">All</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="week">Last Week</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="month">Last Month</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="resolved">Resolved</button>
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group">
+                <button class="btn btn-outline-secondary" onclick="exportPDF()">
+                    <i class="fas fa-file-pdf"></i> Export PDF
+                </button>
+                <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="shareViaWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="shareViaEmail()"><i class="fas fa-envelope"></i> Email</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="copyLink()"><i class="fas fa-link"></i> Copy Link</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Diagnosis History List -->
     {% if histories %}
         <div class="row">
@@ -91,7 +145,8 @@
                 </div>
                 {% for history in date.list %}
                     <div class="col-md-6 mb-4">
-                        <div class="card shadow-sm {% if history.is_resolved %}resolved{% endif %}">
+                        <div class="card shadow-sm {% if history.is_resolved %}resolved{% endif %}" 
+     data-date="{{ history.diagnosis_date|date:'Y-m-d' }}">
                             <div class="card-header bg-light">
                                 <h5 class="card-title mb-0">
                                     {{ history.disease.name|title }}
@@ -168,6 +223,86 @@
                 alert('An error occurred. Please try again.');
             });
         }
+    }
+
+    // Filter functionality
+    document.querySelectorAll('[data-filter]').forEach(button => {
+        button.addEventListener('click', (e) => {
+            // Remove active class from all buttons
+            document.querySelectorAll('[data-filter]').forEach(btn => 
+                btn.classList.remove('active'));
+            // Add active class to clicked button
+            e.target.classList.add('active');
+            
+            const filter = e.target.dataset.filter;
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const date = new Date(card.dataset.date);
+                const now = new Date();
+                const daysDiff = (now - date) / (1000 * 60 * 60 * 24);
+                
+                switch(filter) {
+                    case 'week':
+                        card.style.display = daysDiff <= 7 ? '' : 'none';
+                        break;
+                    case 'month':
+                        card.style.display = daysDiff <= 30 ? '' : 'none';
+                        break;
+                    case 'resolved':
+                        card.style.display = card.classList.contains('resolved') ? '' : 'none';
+                        break;
+                    default:
+                        card.style.display = '';
+                }
+            });
+        });
+    });
+
+    // Export functionality
+    async function exportPDF() {
+        try {
+            const response = await fetch('/diagnosis/export-pdf/', {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'diagnosis-history.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to export PDF. Please try again.');
+        }
+    }
+
+    // Sharing functionality
+    function shareViaWhatsApp() {
+        const text = encodeURIComponent('Check my cattle diagnosis history');
+        const url = encodeURIComponent(window.location.href);
+        window.open(`https://wa.me/?text=${text}%20${url}`);
+    }
+
+    function shareViaEmail() {
+        const subject = encodeURIComponent('Cattle Diagnosis History');
+        const body = encodeURIComponent('Check my cattle diagnosis history: ' + window.location.href);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href)
+            .then(() => {
+                alert('Link copied to clipboard!');
+            })
+            .catch(() => {
+                alert('Failed to copy link.');
+            });
     }
 </script>
 {% endblock %}

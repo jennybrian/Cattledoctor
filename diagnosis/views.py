@@ -10,8 +10,12 @@ import joblib
 from .models import DiagnosisHistory, Disease, Symptom
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.shortcuts import get_object_or_404
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from io import BytesIO
 
 
 # Disease_info dictionary for treatment and prevention information
@@ -282,3 +286,44 @@ def mark_resolved(request, history_id):
         history.save()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False}, status=405)
+
+@login_required
+def export_pdf(request):
+    # Create BytesIO buffer to receive PDF data
+    buffer = BytesIO()
+    
+    # Create the PDF object using BytesIO as its "file"
+    p = canvas.Canvas(buffer, pagesize=letter)
+    
+    # Get user's diagnosis history
+    histories = DiagnosisHistory.objects.filter(user=request.user).order_by('-diagnosis_date')
+    
+    # Draw content
+    y = 750  # Starting y position
+    p.setFont("Helvetica-Bold", 20)
+    p.drawString(50, y, "Diagnosis History")
+    
+    for history in histories:
+        if y < 100:  # New page if near bottom
+            p.showPage()
+            y = 750
+        
+        y -= 30
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y, f"Disease: {history.disease.name}")
+        
+        y -= 20
+        p.setFont("Helvetica", 10)
+        p.drawString(50, y, f"Date: {history.diagnosis_date.strftime('%B %d, %Y')}")
+        
+        y -= 20
+        symptoms = ", ".join([s.name for s in history.symptoms.all()])
+        p.drawString(50, y, f"Symptoms: {symptoms}")
+    
+    # Close the PDF object
+    p.showPage()
+    p.save()
+    
+    # Get the value of the BytesIO buffer
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='diagnosis_history.pdf')
