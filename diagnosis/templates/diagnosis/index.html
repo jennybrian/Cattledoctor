@@ -77,28 +77,36 @@
       100% { transform: rotate(360deg); }
     }
 
- .btn-diagnose {
-    max-width: 250px;  /* Made slightly narrower */
-    margin: 0 auto;
-    padding: 10px 25px;  /* Reduced padding from 15px 30px */
-    background: linear-gradient(45deg, #0d6efd, #0099ff);
-    border: none;
-    border-radius: 10px;  /* Slightly reduced border radius */
-    font-weight: 600;
-    color: white;
-    font-size: 1.1em;    /* Slightly reduced font size */
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;            /* Reduced gap between icon and text */
-}   
+    .btn-diagnose {
+        max-width: 250px;
+        margin: 0 auto;
+        padding: 12px 30px;
+        background: linear-gradient(45deg, #0d6efd, #0099ff);  /* Back to blue gradient */
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        color: white;
+        font-size: 1.1em;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);  /* Add initial shadow */
+        position: relative;  /* Ensure button stays on top */
+        z-index: 10;        /* Prevent button from disappearing */
+    }   
 
     .btn-diagnose:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        box-shadow: 0 6px 20px rgba(13, 110, 253, 0.3);
         background: linear-gradient(45deg, #0099ff, #0d6efd);
+    }
+
+    .btn-diagnose:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 10px rgba(13, 110, 253, 0.2);
     }
 
     .btn-diagnose .icon {
@@ -162,17 +170,6 @@
     100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
 }
 
-.severity-indicator {
-    margin-top: 1.5rem;
-    text-align: center;
-}
-
-.severity-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-}
   </style>
 </head>
 <body>
@@ -302,18 +299,7 @@
       <div id="diseaseList" class="list-group mt-3"></div>
     </div>
 
-    <div class="severity-indicator mt-3">
-    <div class="d-flex align-items-center gap-2">
-        <span class="severity-dot bg-success"></span>
-        <small>Mild</small>
-        <span class="severity-dot bg-warning"></span>
-        <small>Moderate</small>
-        <span class="severity-dot bg-danger"></span>
-        <small>Severe</small>
-    </div>
-</div>
-
-<div class="quick-tips alert alert-info mt-4">
+    <div class="quick-tips alert alert-info mt-4">
     <h6><i class="fas fa-lightbulb"></i> Quick Tips</h6>
     <ul class="mb-0">
         <li>Select multiple symptoms for more accurate diagnosis</li>
@@ -336,25 +322,6 @@
       });
       $('#results').hide();
     });
-
-    // Add icons for each symptom category
-const categoryIcons = {
-    'Respiratory Symptoms': '🫁',
-    'General Body Condition': '🏥',
-    'Skin and Hair': '🦮',
-    'Digestive and Abdominal': '🔄',
-    'Mouth and Feet': '🦶',
-    'Udder and Reproduction': '🥛',
-    'Musculoskeletal': '🦴',
-    'Eyes and Head': '👁️'
-};
-
-// Apply icons to optgroup labels
-$('optgroup').each(function() {
-    const label = $(this).attr('label');
-    const icon = categoryIcons[label] || '📋';
-    $(this).attr('label', `${icon} ${label}`);
-});
 
     function getCookie(name) {
       let cookieValue = null;
