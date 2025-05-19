@@ -19,19 +19,37 @@
     .select2-container {
       width: 100% !important;
     }
+    .symptom-category-header {
+      background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+      padding: 8px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #495057;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
     .select2-container .select2-selection--multiple {
-      background-color: rgba(255, 255, 255, 0.9);
-      border: 2px solid #0d6efd;
-      border-radius: 12px;
-      padding: 5px;
+      min-height: 150px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(13, 110, 253, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    .select2-container .select2-selection--multiple:hover {
+      border-color: #0d6efd;
+      box-shadow: 0 4px 20px rgba(13, 110, 253, 0.15);
     }
     .select2-selection__choice {
-      background-color: #0d6efd;
-      color: white;
-      font-weight: bold;
-    }
-    .select2-selection__choice__remove {
-      color: white;
+      background: linear-gradient(45deg, #0d6efd, #0099ff) !important;
+      border: none !important;
+      border-radius: 20px !important;
+      padding: 5px 10px !important;
+      color: white !important;
+      box-shadow: 0 2px 5px rgba(13, 110, 253, 0.2);
     }
     .treatment-card {
       border-left: 4px solid #28a745;
@@ -86,6 +104,75 @@
     .btn-diagnose .icon {
         font-size: 1.2em;
     }
+
+    .list-group-item {
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.treatment-card, .prevention-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.treatment-card::before, .prevention-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0), rgba(255,255,255,0.1), rgba(255,255,255,0));
+    transform: translateX(-100%);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    to { transform: translateX(100%); }
+}
+
+.loading-container {
+    position: relative;
+    padding: 20px;
+}
+
+.loading-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #0d6efd;
+    opacity: 0;
+    animation: pulse 1.5s ease-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+.severity-indicator {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.severity-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
   </style>
 </head>
 <body>
@@ -214,6 +301,26 @@
       <h5 class="text-success">Diagnosis Results:</h5>
       <div id="diseaseList" class="list-group mt-3"></div>
     </div>
+
+    <div class="severity-indicator mt-3">
+    <div class="d-flex align-items-center gap-2">
+        <span class="severity-dot bg-success"></span>
+        <small>Mild</small>
+        <span class="severity-dot bg-warning"></span>
+        <small>Moderate</small>
+        <span class="severity-dot bg-danger"></span>
+        <small>Severe</small>
+    </div>
+</div>
+
+<div class="quick-tips alert alert-info mt-4">
+    <h6><i class="fas fa-lightbulb"></i> Quick Tips</h6>
+    <ul class="mb-0">
+        <li>Select multiple symptoms for more accurate diagnosis</li>
+        <li>Start with the most prominent symptoms</li>
+        <li>Consider recent changes in behavior</li>
+    </ul>
+</div>
   </div>
 
   <!-- Scripts -->
@@ -229,6 +336,25 @@
       });
       $('#results').hide();
     });
+
+    // Add icons for each symptom category
+const categoryIcons = {
+    'Respiratory Symptoms': '🫁',
+    'General Body Condition': '🏥',
+    'Skin and Hair': '🦮',
+    'Digestive and Abdominal': '🔄',
+    'Mouth and Feet': '🦶',
+    'Udder and Reproduction': '🥛',
+    'Musculoskeletal': '🦴',
+    'Eyes and Head': '👁️'
+};
+
+// Apply icons to optgroup labels
+$('optgroup').each(function() {
+    const label = $(this).attr('label');
+    const icon = categoryIcons[label] || '📋';
+    $(this).attr('label', `${icon} ${label}`);
+});
 
     function getCookie(name) {
       let cookieValue = null;
