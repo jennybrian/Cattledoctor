@@ -24,6 +24,7 @@ class DiagnosisHistory(models.Model):
     diagnosis_date = models.DateTimeField(default=timezone.now)
     confidence_score = models.FloatField(default=0.0)  # Add confidence score from prediction
     notes = models.TextField(blank=True)
+    is_resolved = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Diagnosis histories"

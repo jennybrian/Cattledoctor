@@ -10,6 +10,8 @@ import joblib
 from .models import DiagnosisHistory, Disease, Symptom
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 
 # Disease_info dictionary for treatment and prevention information
@@ -271,3 +273,12 @@ def predict_disease(request):
             "error": f"Prediction failed: {str(e)}",
             "symptoms": symptoms if 'symptoms' in locals() else None
         }, status=500)
+
+@login_required
+def mark_resolved(request, history_id):
+    if request.method == 'POST':
+        history = get_object_or_404(DiagnosisHistory, id=history_id, user=request.user)
+        history.is_resolved = True
+        history.save()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False}, status=405)
