@@ -7,48 +7,77 @@
     <p class="lead animate__animated animate__fadeInUp">A smart tool to help you diagnose cattle diseases quickly and accurately.</p>
 </div>
 
-<!-- Banner Image -->
+<!-- Animated Banner Image -->
 <div class="container text-center mt-4">
-    <img src="https://plus.unsplash.com/premium_vector-1723417149356-172b21a2c0ed" 
-    class="img-fluid rounded shadow-lg animate__animated animate__zoomIn"
-    alt="Cattle Image"
-    style="width: 100%; max-width: 300px; height: auto;">
+    <img src="https://cdn.dribbble.com/users/157932/screenshots/6811013/media/9271f4cb43cb8cfbd95ce683ce7e3bd7.gif" 
+         class="img-fluid rounded shadow-lg animate__animated animate__zoomIn"
+         alt="Cattle Animation"
+         style="width: 100%; max-width: 350px; height: auto;">
 </div>
 
 <!-- Action Section -->
 <div class="container text-center mt-5">
     <h2 class="animate__animated animate__fadeIn">Hello, <strong>{{ user.username }}</strong>!</h2>
     <p class="animate__animated animate__fadeInUp">Click the button below to start diagnosing your cattle's health.</p>
-    
-    <a href="{% url 'diagnosis_history' %}" class="btn btn-success btn-lg mt-3 shadow animate__animated animate__pulse animate__infinite">View Diagnosis History 📜</a>
 
-    <a href="{% url 'diagnosis_home' %}" class="btn btn-success btn-lg mt-3 shadow animate__animated animate__pulse animate__infinite">
-        Start Diagnosing 🏥
-    </a>
+    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+        <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary btn-lg animate__animated animate__pulse animate__infinite">
+            📜 View Diagnosis History
+        </a>
+
+        <a href="{% url 'diagnosis_home' %}" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">
+            🏥 Start Diagnosing
+        </a>
+    </div>
 </div>
 
 <!-- Features Section -->
-<div class="container mt-5">
+<div class="container mt-5 animate__animated animate__fadeInUp">
     <div class="row text-center">
-        <div class="col-md-4">
-            <div class="card p-3 shadow-lg h-100">
+        <div class="col-md-4 mb-4">
+            <div class="card p-3 shadow-lg h-100 animate__animated animate__zoomIn">
                 <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
                 <h5>AI-Powered Diagnosis</h5>
                 <p>Our system uses AI models to suggest possible cattle diseases based on symptoms.</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card p-3 shadow-lg h-100">
+        <div class="col-md-4 mb-4">
+            <div class="card p-3 shadow-lg h-100 animate__animated animate__zoomIn animate__delay-1s">
                 <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
                 <h5>Real-Time Insights</h5>
                 <p>Get immediate recommendations and guidance for better cattle health management.</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card p-3 shadow-lg h-100">
+        <div class="col-md-4 mb-4">
+            <div class="card p-3 shadow-lg h-100 animate__animated animate__zoomIn animate__delay-2s">
                 <i class="fas fa-user-md fa-3x text-info mb-3"></i>
                 <h5>Veterinary Support</h5>
                 <p>Connect with professional veterinarians if further assistance is needed.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="container mt-5">
+    <h3 class="text-center mb-4 animate__animated animate__fadeInDown">🌟 What Our Users Say</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-lg p-3 mb-4 animate__animated animate__fadeInUp">
+                <p>“This tool saved my entire herd during a disease outbreak. It’s fast and easy!”</p>
+                <h6 class="text-end">— Grace M., Farmer</h6>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-lg p-3 mb-4 animate__animated animate__fadeInUp animate__delay-1s">
+                <p>“I love how detailed and accurate the diagnosis is. Highly recommended!”</p>
+                <h6 class="text-end">— Ahmed B., Ranch Owner</h6>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-lg p-3 mb-4 animate__animated animate__fadeInUp animate__delay-2s">
+                <p>“A must-have for any livestock farmer. It’s like having a vet in your pocket!”</p>
+                <h6 class="text-end">— Joan K., Livestock Specialist</h6>
             </div>
         </div>
     </div>
