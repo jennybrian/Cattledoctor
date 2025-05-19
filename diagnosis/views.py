@@ -16,6 +16,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from io import BytesIO
+from django.utils import timezone
+from datetime import timedelta
 
 
 # Disease_info dictionary for treatment and prevention information
@@ -178,14 +180,22 @@ def preprocess_symptoms(symptoms):
 @login_required
 def diagnosis_history(request):
     """View for displaying user's diagnosis history"""
-    histories = (DiagnosisHistory.objects
-                .filter(user=request.user)
-                .select_related('disease')
-                .prefetch_related('symptoms')
-                .order_by('-diagnosis_date'))
+    histories = DiagnosisHistory.objects.filter(user=request.user).order_by('-diagnosis_date')
+    
+    # Calculate statistics
+    now = timezone.now()
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    
+    context = {
+        'histories': histories,
+        'resolved_count': histories.filter(is_resolved=True).count(),
+        'weekly_count': histories.filter(diagnosis_date__gte=week_ago).count(),
+        'monthly_count': histories.filter(diagnosis_date__gte=month_ago).count(),
+    }
     
     logger.info(f"Fetched {histories.count()} history records for user {request.user.username}")
-    return render(request, "diagnosis/history.html", {'histories': histories})
+    return render(request, "diagnosis/history.html", context)
 
 @login_required
 def clear_history(request):

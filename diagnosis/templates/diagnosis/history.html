@@ -230,15 +230,15 @@
             <div class="card bg-success text-white">
                 <div class="card-body">
                     <h6 class="card-title">Resolved Cases</h6>
-                    <h2 class="mb-0">{{ histories|selectattr:"is_resolved"|length }}</h2>
+                    <h2 class="mb-0">{{ resolved_count }}</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
-            <div class="card bg-warning">
+            <div class="card bg-warning text-dark">
                 <div class="card-body">
                     <h6 class="card-title">This Month</h6>
-                    <h2 class="mb-0">{{ histories|selectattr:"diagnosis_date"|within_days:30|length }}</h2>
+                    <h2 class="mb-0">{{ monthly_count }}</h2>
                 </div>
             </div>
         </div>
@@ -246,7 +246,7 @@
             <div class="card bg-info text-white">
                 <div class="card-body">
                     <h6 class="card-title">This Week</h6>
-                    <h2 class="mb-0">{{ histories|selectattr:"diagnosis_date"|within_days:7|length }}</h2>
+                    <h2 class="mb-0">{{ weekly_count }}</h2>
                 </div>
             </div>
         </div>
