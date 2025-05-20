@@ -12,13 +12,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')  # Fix typo from SSECRET_KEY
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    'cattle-disease-diagnosis.onrender.com',
+    'cattledoctor.onrender.com',
     'localhost',
     '127.0.0.1',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://cattle-disease-diagnosis.onrender.com',
+    'https://cattledoctor.onrender.com',
 ]
 
 # Application definition
