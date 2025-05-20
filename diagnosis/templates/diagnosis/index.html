@@ -38,7 +38,6 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
-      overflow-x: hidden; /* Prevent horizontal scroll */
     }
     .select2-container .select2-selection--multiple:hover {
       border-color: #0d6efd;
@@ -225,27 +224,6 @@
     ::-webkit-scrollbar-thumb:hover {
         background: #0b5ed7;
     }
-
-    /* Add these new styles for Select2 choices */
-    .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        max-width: 95%; /* Prevent overflow */
-        white-space: normal; /* Allow text to wrap */
-        word-break: break-word; /* Break long words */
-        margin: 5px;
-    }
-
-    .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-        padding: 8px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-
-    /* Optional: Adjust the dropdown width to match container */
-    .select2-dropdown {
-        width: auto !important;
-        min-width: 100%;
-    }
   </style>
 </head>
 <body>
@@ -253,6 +231,9 @@
     <div class="container-fluid">
       <div class="row align-items-center justify-content-between">
         <div class="col-md-6 mb-2 mb-md-0">
+          <h4 class="mb-0">
+            <i class="fas fa-stethoscope me-2"></i> Cattle Disease Diagnosis
+          </h4>
         </div>
         <div class="col-md-6 text-md-end">
           <span class="me-3">
@@ -267,29 +248,19 @@
   </div>
 
   <div class="container mt-5 bg-white p-4 rounded shadow-sm animate__animated animate__fadeInUp">
-    <div class="row mb-4 align-items-center">
-    <div class="col-6">
-        <!-- Left side - Back button -->
-        <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <h4 class="mb-0">
+                👋 Hey there! Hope you are good! 🌟 Let's proceed 🐮
+            </h4>
+        </div>
+          <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary btn-sm animate__animated animate__fadeInRight">
+              <i class="fas fa-history"></i> Diagnosis History
+          </a>
     </div>
-    <div class="col-6 text-end">
-        <!-- Right side - Diagnosis History button -->
-        <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary btn-sm">
-            <i class="fas fa-history"></i> Diagnosis History
-        </a>
-    </div>
-</div>
-
-<!-- Add the greeting in a new row -->
-<div class="row mb-4">
-    <div class="col-12">
-        <h4 class="mb-0 text-center">
-            👋 Hey there! Hope you are good! 🌟 Let's proceed 🐮
-        </h4>
-    </div>
-</div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Select Symptoms:</label>
