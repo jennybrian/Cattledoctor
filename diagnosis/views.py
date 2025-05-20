@@ -289,7 +289,6 @@ def predict_disease(request):
         }, status=500)
 
 @login_required
-@require_POST
 def mark_resolved(request, history_id):
     try:
         history = DiagnosisHistory.objects.get(id=history_id, user=request.user)
