@@ -15,7 +15,6 @@ ALLOWED_HOSTS = [
     'cattle-disease-diagnosis.onrender.com',
     'localhost',
     '127.0.0.1',
-    '*',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -89,6 +88,7 @@ if os.environ.get('DATABASE_URL'):
             default=os.environ.get('DATABASE_URL'),
             conn_max_age=600,
             conn_health_checks=True,
+            ssl_require=True,  # ✅ This is required for Render
         )
     }
 else:
@@ -148,7 +148,7 @@ USE_TZ = True
 
 # Static files configuration
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
