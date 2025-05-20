@@ -162,7 +162,8 @@
                 {% for history in date.list %}
                     <div class="col-md-6 mb-4">
                         <div class="card shadow-sm {% if history.is_resolved %}resolved{% endif %}" 
-     data-date="{{ history.diagnosis_date|date:'Y-m-d' }}">
+     data-date="{{ history.diagnosis_date|date:'Y-m-d' }}"
+     data-history-id="{{ history.id }}">
                             <div class="card-header bg-light">
                                 <h5 class="card-title mb-0">
                                     {{ history.disease.name|title }}
@@ -262,23 +263,34 @@
 <script>
     function markResolved(id) {
         if (confirm('Mark this case as resolved?')) {
-            fetch(`/diagnosis/mark-resolved/${id}/`, {
+            fetch(`/history/mark-resolved/${id}/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                     'Content-Type': 'application/json'
                 }
             })
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 return response.json();
             })
             .then(data => {
-                if (data.success) location.reload();
+                if (data.success) {
+                    // Visual feedback before reload
+                    const card = document.querySelector(`[data-history-id="${id}"]`);
+                    if (card) {
+                        card.classList.add('resolved');
+                        card.querySelector('.btn-outline-success').remove();
+                    }
+                    // Reload after a short delay
+                    setTimeout(() => location.reload(), 500);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                alert('Failed to mark as resolved. Please try again.');
             });
         }
     }
@@ -418,3 +430,4 @@ scrollTopBtn.addEventListener('click', () => {
 });
 </script>
 {% endblock %}
+{% csrf_token %}
