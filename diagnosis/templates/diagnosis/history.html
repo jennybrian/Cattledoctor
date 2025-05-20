@@ -262,34 +262,23 @@
 <script>
     function markResolved(id) {
         if (confirm('Mark this case as resolved?')) {
-            fetch(`/history/mark-resolved/${id}/`, {
+            fetch(`/diagnosis/mark-resolved/${id}/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-CSRFToken': '{{ csrf_token }}',
                     'Content-Type': 'application/json'
                 }
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                if (!response.ok) throw new Error('Network response was not ok');
                 return response.json();
             })
             .then(data => {
-                if (data.success) {
-                    // Visual feedback before reload
-                    const card = document.querySelector(`[data-history-id="${id}"]`);
-                    if (card) {
-                        card.classList.add('resolved');
-                        card.querySelector('.btn-outline-success').remove();
-                    }
-                    // Reload after a short delay
-                    setTimeout(() => location.reload(), 500);
-                }
+                if (data.success) location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Failed to mark as resolved. Please try again.');
+                alert('An error occurred. Please try again.');
             });
         }
     }
