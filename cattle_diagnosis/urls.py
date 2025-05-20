@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import home, verify_email
+from accounts import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
+    path('', views.home, name='home'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('verify-email/<str:token>/', verify_email, name='verify_email'),
+    path('accounts/register/', views.register, name='register'),
     path('diagnosis/', include('diagnosis.urls')),
 ]

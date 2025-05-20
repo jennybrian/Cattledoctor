@@ -11,7 +11,16 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')  # Fix typo from SSECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'cattle-disease-diagnosis.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '*',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://cattle-disease-diagnosis.onrender.com',
+]
 
 # Application definition
 INSTALLED_APPS = [
