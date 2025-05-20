@@ -38,6 +38,7 @@
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
+      overflow-x: hidden; /* Prevent horizontal scroll */
     }
     .select2-container .select2-selection--multiple:hover {
       border-color: #0d6efd;
@@ -223,6 +224,27 @@
 
     ::-webkit-scrollbar-thumb:hover {
         background: #0b5ed7;
+    }
+
+    /* Add these new styles for Select2 choices */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        max-width: 95%; /* Prevent overflow */
+        white-space: normal; /* Allow text to wrap */
+        word-break: break-word; /* Break long words */
+        margin: 5px;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+        padding: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    /* Optional: Adjust the dropdown width to match container */
+    .select2-dropdown {
+        width: auto !important;
+        min-width: 100%;
     }
   </style>
 </head>
