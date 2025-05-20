@@ -8,5 +8,9 @@ venv/
 .env
 *.sqlite3
 .DS_Store
-staticfiles/
-media/
+# Static and media
+/staticfiles/
+/media/
+# Local development
+.vscode/
+*.lo
