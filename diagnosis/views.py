@@ -289,13 +289,17 @@ def predict_disease(request):
         }, status=500)
 
 @login_required
+@require_POST
 def mark_resolved(request, history_id):
-    if request.method == 'POST':
-        history = get_object_or_404(DiagnosisHistory, id=history_id, user=request.user)
+    try:
+        history = DiagnosisHistory.objects.get(id=history_id, user=request.user)
         history.is_resolved = True
         history.save()
         return JsonResponse({'success': True})
-    return JsonResponse({'success': False}, status=405)
+    except DiagnosisHistory.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Record not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 @login_required
 def export_pdf(request):
