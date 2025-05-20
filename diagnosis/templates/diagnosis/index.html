@@ -206,6 +206,24 @@
     .btn-light:active {
         transform: translateY(1px);
     }
+
+    /* Custom scrollbar styles */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #0d6efd;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #0b5ed7;
+    }
   </style>
 </head>
 <body>
@@ -214,7 +232,7 @@
       <div class="row align-items-center justify-content-between">
         <div class="col-md-6 mb-2 mb-md-0">
           <h4 class="mb-0">
-            <i class=""></i>
+            <i class="fas fa-stethoscope me-2"></i> Cattle Disease Diagnosis
           </h4>
         </div>
         <div class="col-md-6 text-md-end">
@@ -239,9 +257,9 @@
                 👋 Hey there! Hope you are good! 🌟 Let's proceed 🐮
             </h4>
         </div>
-        <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary animate__animated animate__fadeInRight">
-            <i class="fas fa-history"></i> Diagnosis History
-        </a>
+          <a href="{% url 'diagnosis_history' %}" class="btn btn-outline-primary btn-sm animate__animated animate__fadeInRight">
+              <i class="fas fa-history"></i> Diagnosis History
+          </a>
     </div>
 
         <div class="mb-3">
